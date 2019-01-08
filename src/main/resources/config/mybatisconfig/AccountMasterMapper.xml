@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csi.sbs.deposit.business.dao.AccountMasterDao" >
+  <resultMap id="BaseResultMap" type="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ClearingCode" property="clearingcode" jdbcType="VARCHAR" />
+    <result column="BranchNumber" property="branchnumber" jdbcType="VARCHAR" />
+    <result column="CustomerNumber" property="customernumber" jdbcType="VARCHAR" />
+    <result column="AccountType" property="accounttype" jdbcType="VARCHAR" />
+    <result column="AccountStatus" property="accountstatus" jdbcType="CHAR" />
+    <result column="CurrencyCode" property="currencycode" jdbcType="CHAR" />
+    <result column="Balance" property="balance" jdbcType="DECIMAL" />
+    <result column="LastUpdatedDate" property="lastupdateddate" jdbcType="TIMESTAMP" />
+    <result column="ChequeBookType" property="chequebooktype" jdbcType="CHAR" />
+    <result column="ChequeBookSize" property="chequebooksize" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+    select * from t_account_master
+    where 1=1
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from t_account_master
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+    insert into t_account_master
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="clearingcode != null" >
+        ClearingCode,
+      </if>
+      <if test="branchnumber != null" >
+        BranchNumber,
+      </if>
+      <if test="customernumber != null" >
+        CustomerNumber,
+      </if>
+      <if test="accounttype != null" >
+        AccountType,
+      </if>
+      <if test="accountstatus != null" >
+        AccountStatus,
+      </if>
+      <if test="currencycode != null" >
+        CurrencyCode,
+      </if>
+      <if test="balance != null" >
+        Balance,
+      </if>
+      <if test="lastupdateddate != null" >
+        LastUpdatedDate,
+      </if>
+      <if test="chequebooktype != null" >
+        ChequeBookType,
+      </if>
+      <if test="chequebooksize != null" >
+        ChequeBookSize,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="clearingcode != null" >
+        #{clearingcode,jdbcType=VARCHAR},
+      </if>
+      <if test="branchnumber != null" >
+        #{branchnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customernumber != null" >
+        #{customernumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="accountstatus != null" >
+        #{accountstatus,jdbcType=CHAR},
+      </if>
+      <if test="currencycode != null" >
+        #{currencycode,jdbcType=CHAR},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="lastupdateddate != null" >
+        #{lastupdateddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chequebooktype != null" >
+        #{chequebooktype,jdbcType=CHAR},
+      </if>
+      <if test="chequebooksize != null" >
+        #{chequebooksize,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+    update t_account_master
+    <set >
+      <if test="clearingcode != null" >
+        ClearingCode = #{clearingcode,jdbcType=VARCHAR},
+      </if>
+      <if test="branchnumber != null" >
+        BranchNumber = #{branchnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customernumber != null" >
+        CustomerNumber = #{customernumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        AccountType = #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="accountstatus != null" >
+        AccountStatus = #{accountstatus,jdbcType=CHAR},
+      </if>
+      <if test="currencycode != null" >
+        CurrencyCode = #{currencycode,jdbcType=CHAR},
+      </if>
+      <if test="balance != null" >
+        Balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="lastupdateddate != null" >
+        LastUpdatedDate = #{lastupdateddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chequebooktype != null" >
+        ChequeBookType = #{chequebooktype,jdbcType=CHAR},
+      </if>
+      <if test="chequebooksize != null" >
+        ChequeBookSize = #{chequebooksize,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

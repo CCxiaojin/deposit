@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csi.sbs.deposit.business.dao.CustomerMasterDao" >
+  <resultMap id="BaseResultMap" type="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ClearingCode" property="clearingcode" jdbcType="VARCHAR" />
+    <result column="BranchNumber" property="branchnumber" jdbcType="VARCHAR" />
+    <result column="CustomerNumber" property="customernumber" jdbcType="VARCHAR" />
+    <result column="CustomerName" property="customername" jdbcType="VARCHAR" />
+    <result column="MobilePhoneNumber" property="mobilephonenumber" jdbcType="VARCHAR" />
+    <result column="CustomerID" property="customerid" jdbcType="VARCHAR" />
+    <result column="IssueCountry" property="issuecountry" jdbcType="VARCHAR" />
+    <result column="DateOfBirth" property="dateofbirth" jdbcType="TIMESTAMP" />
+    <result column="ChineseName" property="chinesename" jdbcType="VARCHAR" />
+    <result column="Gender" property="gender" jdbcType="CHAR" />
+    <result column="Nationality" property="nationality" jdbcType="VARCHAR" />
+    <result column="PermanentResidenceStatus" property="permanentresidencestatus" jdbcType="CHAR" />
+    <result column="MaritalStatus" property="maritalstatus" jdbcType="CHAR" />
+    <result column="Education" property="education" jdbcType="CHAR" />
+    <result column="ResidentialAddress" property="residentialaddress" jdbcType="VARCHAR" />
+    <result column="MailingAddress" property="mailingaddress" jdbcType="VARCHAR" />
+    <result column="ResidencePhoneNumber" property="residencephonenumber" jdbcType="DECIMAL" />
+    <result column="WeChatID" property="wechatid" jdbcType="VARCHAR" />
+    <result column="Accommodation" property="accommodation" jdbcType="CHAR" />
+    <result column="YearsOfResidence" property="yearsofresidence" jdbcType="DECIMAL" />
+    <result column="Occupation" property="occupation" jdbcType="VARCHAR" />
+    <result column="EmployerCompanyName" property="employercompanyname" jdbcType="VARCHAR" />
+    <result column="Position" property="position" jdbcType="VARCHAR" />
+    <result column="CompanyAddress" property="companyaddress" jdbcType="VARCHAR" />
+    <result column="CompanyPhoneNumber" property="companyphonenumber" jdbcType="VARCHAR" />
+    <result column="YearsOfServices" property="yearsofservices" jdbcType="DECIMAL" />
+    <result column="MonthlySalary" property="monthlysalary" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <select id="queryAll" resultMap="BaseResultMap" parameterType="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
+    select * from t_customer_master
+    where 1=1
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from t_customer_master
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
+    insert into t_customer_master
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="clearingcode != null" >
+        ClearingCode,
+      </if>
+      <if test="branchnumber != null" >
+        BranchNumber,
+      </if>
+      <if test="customernumber != null" >
+        CustomerNumber,
+      </if>
+      <if test="customername != null" >
+        CustomerName,
+      </if>
+      <if test="mobilephonenumber != null" >
+        MobilePhoneNumber,
+      </if>
+      <if test="customerid != null" >
+        CustomerID,
+      </if>
+      <if test="issuecountry != null" >
+        IssueCountry,
+      </if>
+      <if test="dateofbirth != null" >
+        DateOfBirth,
+      </if>
+      <if test="chinesename != null" >
+        ChineseName,
+      </if>
+      <if test="gender != null" >
+        Gender,
+      </if>
+      <if test="nationality != null" >
+        Nationality,
+      </if>
+      <if test="permanentresidencestatus != null" >
+        PermanentResidenceStatus,
+      </if>
+      <if test="maritalstatus != null" >
+        MaritalStatus,
+      </if>
+      <if test="education != null" >
+        Education,
+      </if>
+      <if test="residentialaddress != null" >
+        ResidentialAddress,
+      </if>
+      <if test="mailingaddress != null" >
+        MailingAddress,
+      </if>
+      <if test="residencephonenumber != null" >
+        ResidencePhoneNumber,
+      </if>
+      <if test="wechatid != null" >
+        WeChatID,
+      </if>
+      <if test="accommodation != null" >
+        Accommodation,
+      </if>
+      <if test="yearsofresidence != null" >
+        YearsOfResidence,
+      </if>
+      <if test="occupation != null" >
+        Occupation,
+      </if>
+      <if test="employercompanyname != null" >
+        EmployerCompanyName,
+      </if>
+      <if test="position != null" >
+        Position,
+      </if>
+      <if test="companyaddress != null" >
+        CompanyAddress,
+      </if>
+      <if test="companyphonenumber != null" >
+        CompanyPhoneNumber,
+      </if>
+      <if test="yearsofservices != null" >
+        YearsOfServices,
+      </if>
+      <if test="monthlysalary != null" >
+        MonthlySalary,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="clearingcode != null" >
+        #{clearingcode,jdbcType=VARCHAR},
+      </if>
+      <if test="branchnumber != null" >
+        #{branchnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customernumber != null" >
+        #{customernumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customername != null" >
+        #{customername,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilephonenumber != null" >
+        #{mobilephonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customerid != null" >
+        #{customerid,jdbcType=VARCHAR},
+      </if>
+      <if test="issuecountry != null" >
+        #{issuecountry,jdbcType=VARCHAR},
+      </if>
+      <if test="dateofbirth != null" >
+        #{dateofbirth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chinesename != null" >
+        #{chinesename,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="nationality != null" >
+        #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="permanentresidencestatus != null" >
+        #{permanentresidencestatus,jdbcType=CHAR},
+      </if>
+      <if test="maritalstatus != null" >
+        #{maritalstatus,jdbcType=CHAR},
+      </if>
+      <if test="education != null" >
+        #{education,jdbcType=CHAR},
+      </if>
+      <if test="residentialaddress != null" >
+        #{residentialaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mailingaddress != null" >
+        #{mailingaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="residencephonenumber != null" >
+        #{residencephonenumber,jdbcType=DECIMAL},
+      </if>
+      <if test="wechatid != null" >
+        #{wechatid,jdbcType=VARCHAR},
+      </if>
+      <if test="accommodation != null" >
+        #{accommodation,jdbcType=CHAR},
+      </if>
+      <if test="yearsofresidence != null" >
+        #{yearsofresidence,jdbcType=DECIMAL},
+      </if>
+      <if test="occupation != null" >
+        #{occupation,jdbcType=VARCHAR},
+      </if>
+      <if test="employercompanyname != null" >
+        #{employercompanyname,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="companyaddress != null" >
+        #{companyaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="companyphonenumber != null" >
+        #{companyphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="yearsofservices != null" >
+        #{yearsofservices,jdbcType=DECIMAL},
+      </if>
+      <if test="monthlysalary != null" >
+        #{monthlysalary,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
+    update t_customer_master
+    <set >
+      <if test="clearingcode != null" >
+        ClearingCode = #{clearingcode,jdbcType=VARCHAR},
+      </if>
+      <if test="branchnumber != null" >
+        BranchNumber = #{branchnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customernumber != null" >
+        CustomerNumber = #{customernumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customername != null" >
+        CustomerName = #{customername,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilephonenumber != null" >
+        MobilePhoneNumber = #{mobilephonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customerid != null" >
+        CustomerID = #{customerid,jdbcType=VARCHAR},
+      </if>
+      <if test="issuecountry != null" >
+        IssueCountry = #{issuecountry,jdbcType=VARCHAR},
+      </if>
+      <if test="dateofbirth != null" >
+        DateOfBirth = #{dateofbirth,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chinesename != null" >
+        ChineseName = #{chinesename,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        Gender = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="nationality != null" >
+        Nationality = #{nationality,jdbcType=VARCHAR},
+      </if>
+      <if test="permanentresidencestatus != null" >
+        PermanentResidenceStatus = #{permanentresidencestatus,jdbcType=CHAR},
+      </if>
+      <if test="maritalstatus != null" >
+        MaritalStatus = #{maritalstatus,jdbcType=CHAR},
+      </if>
+      <if test="education != null" >
+        Education = #{education,jdbcType=CHAR},
+      </if>
+      <if test="residentialaddress != null" >
+        ResidentialAddress = #{residentialaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="mailingaddress != null" >
+        MailingAddress = #{mailingaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="residencephonenumber != null" >
+        ResidencePhoneNumber = #{residencephonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatid != null" >
+        WeChatID = #{wechatid,jdbcType=VARCHAR},
+      </if>
+      <if test="accommodation != null" >
+        Accommodation = #{accommodation,jdbcType=CHAR},
+      </if>
+      <if test="yearsofresidence != null" >
+        YearsOfResidence = #{yearsofresidence,jdbcType=DECIMAL},
+      </if>
+      <if test="occupation != null" >
+        Occupation = #{occupation,jdbcType=VARCHAR},
+      </if>
+      <if test="employercompanyname != null" >
+        EmployerCompanyName = #{employercompanyname,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        Position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="companyaddress != null" >
+        CompanyAddress = #{companyaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="companyphonenumber != null" >
+        CompanyPhoneNumber = #{companyphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="yearsofservices != null" >
+        YearsOfServices = #{yearsofservices,jdbcType=DECIMAL},
+      </if>
+      <if test="monthlysalary != null" >
+        MonthlySalary = #{monthlysalary,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>
