@@ -8,11 +8,7 @@ public class AccountMasterModel {
     
 	private String id;
 
-    private String clearingcode;
-
-    private String branchnumber;
-
-    private String customernumber;
+    private String accountnumber;
 
     private String accounttype;
 
@@ -27,6 +23,8 @@ public class AccountMasterModel {
     private String chequebooktype;
 
     private Short chequebooksize;
+    
+    
 
 	public String getId() {
 		return id;
@@ -36,28 +34,12 @@ public class AccountMasterModel {
 		this.id = id;
 	}
 
-	public String getClearingcode() {
-		return clearingcode;
+	public String getAccountnumber() {
+		return accountnumber;
 	}
 
-	public void setClearingcode(String clearingcode) {
-		this.clearingcode = clearingcode;
-	}
-
-	public String getBranchnumber() {
-		return branchnumber;
-	}
-
-	public void setBranchnumber(String branchnumber) {
-		this.branchnumber = branchnumber;
-	}
-
-	public String getCustomernumber() {
-		return customernumber;
-	}
-
-	public void setCustomernumber(String customernumber) {
-		this.customernumber = customernumber;
+	public void setAccountnumber(String accountnumber) {
+		this.accountnumber = accountnumber;
 	}
 
 	public String getAccounttype() {
@@ -115,8 +97,6 @@ public class AccountMasterModel {
 	public void setChequebooksize(Short chequebooksize) {
 		this.chequebooksize = chequebooksize;
 	}
-    
-    
 
 	
     

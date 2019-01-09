@@ -3,8 +3,6 @@
 <mapper namespace="com.csi.sbs.deposit.business.dao.CustomerMasterDao" >
   <resultMap id="BaseResultMap" type="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
     <id column="ID" property="id" jdbcType="VARCHAR" />
-    <result column="ClearingCode" property="clearingcode" jdbcType="VARCHAR" />
-    <result column="BranchNumber" property="branchnumber" jdbcType="VARCHAR" />
     <result column="CustomerNumber" property="customernumber" jdbcType="VARCHAR" />
     <result column="CustomerName" property="customername" jdbcType="VARCHAR" />
     <result column="MobilePhoneNumber" property="mobilephonenumber" jdbcType="VARCHAR" />
@@ -19,7 +17,7 @@
     <result column="Education" property="education" jdbcType="CHAR" />
     <result column="ResidentialAddress" property="residentialaddress" jdbcType="VARCHAR" />
     <result column="MailingAddress" property="mailingaddress" jdbcType="VARCHAR" />
-    <result column="ResidencePhoneNumber" property="residencephonenumber" jdbcType="DECIMAL" />
+    <result column="ResidencePhoneNumber" property="residencephonenumber" jdbcType="VARCHAR" />
     <result column="WeChatID" property="wechatid" jdbcType="VARCHAR" />
     <result column="Accommodation" property="accommodation" jdbcType="CHAR" />
     <result column="YearsOfResidence" property="yearsofresidence" jdbcType="DECIMAL" />
@@ -47,12 +45,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         ID,
-      </if>
-      <if test="clearingcode != null" >
-        ClearingCode,
-      </if>
-      <if test="branchnumber != null" >
-        BranchNumber,
       </if>
       <if test="customernumber != null" >
         CustomerNumber,
@@ -134,12 +126,6 @@
       <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="clearingcode != null" >
-        #{clearingcode,jdbcType=VARCHAR},
-      </if>
-      <if test="branchnumber != null" >
-        #{branchnumber,jdbcType=VARCHAR},
-      </if>
       <if test="customernumber != null" >
         #{customernumber,jdbcType=VARCHAR},
       </if>
@@ -183,7 +169,7 @@
         #{mailingaddress,jdbcType=VARCHAR},
       </if>
       <if test="residencephonenumber != null" >
-        #{residencephonenumber,jdbcType=DECIMAL},
+        #{residencephonenumber,jdbcType=VARCHAR},
       </if>
       <if test="wechatid != null" >
         #{wechatid,jdbcType=VARCHAR},
@@ -221,12 +207,6 @@
   <update id="update" parameterType="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
     update t_customer_master
     <set >
-      <if test="clearingcode != null" >
-        ClearingCode = #{clearingcode,jdbcType=VARCHAR},
-      </if>
-      <if test="branchnumber != null" >
-        BranchNumber = #{branchnumber,jdbcType=VARCHAR},
-      </if>
       <if test="customernumber != null" >
         CustomerNumber = #{customernumber,jdbcType=VARCHAR},
       </if>

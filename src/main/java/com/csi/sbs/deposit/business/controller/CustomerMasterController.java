@@ -37,28 +37,14 @@ public class CustomerMasterController {
        @RequestMapping(value = "/{createAccount}", method = RequestMethod.POST)
        @ResponseBody
    	   public String createAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException{
-
            Map<String,Object> map = new HashMap<String,Object>();
            try{
-        	   Map<String,String> param1 = new HashMap<String,String>();
-        	   
-        	   
-        	   param1.put("item", "Clearing_Code,Branch_Number");
-        	   @SuppressWarnings("unused")
-        	   //String temp = "{\"item\":\"Clearing_Code,Branch_Number\"}";
-        	   //ConnPostClient
-        	   //ConnPostClient.postMap(url, map);
-        	   //String str = ConnPostClient.postJson("http://localhost:8083/sysconfig/query", temp);
-			   String str = ConnPostClient.postMap("http://localhost:8083/sysconfig/query", param1);
-//        	   cam.getCustomer().setClearingcode("001");
-//               cam.getCustomer().setBranchnumber("0003");
+        	   String params = "{\"item\":\"Clearing_Code,Branch_Number\"}";
+        	   String result = ConnPostClient.postJson("http://localhost:8083/sysconfig/query", params);
                cam.getCustomer().setCustomernumber("0010003");
                cam.getCustomer().setCustomerid(UUIDUtil.generateUUID());
                cam.getCustomer().setId(UUIDUtil.generateUUID());
                
-               cam.getAccount().setClearingcode("001");
-               cam.getAccount().setBranchnumber("0003");
-               cam.getAccount().setCustomernumber("0010003");
                cam.getAccount().setId(UUIDUtil.generateUUID());
                
                customerMasterService.createCustomer(cam);

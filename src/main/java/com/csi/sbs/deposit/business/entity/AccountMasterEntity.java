@@ -5,15 +5,11 @@ import java.util.Date;
 
 public class AccountMasterEntity {
 	
-    private String id;
+	private String id;
 
-    private Short clearingcode;
+    private String accountnumber;
 
-    private Short branchnumber;
-
-    private Long customernumber;
-
-    private Short accounttype;
+    private String accounttype;
 
     private String accountstatus;
 
@@ -26,92 +22,80 @@ public class AccountMasterEntity {
     private String chequebooktype;
 
     private Short chequebooksize;
+    
+    
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public Short getClearingcode() {
-        return clearingcode;
-    }
+	public String getAccountnumber() {
+		return accountnumber;
+	}
 
-    public void setClearingcode(Short clearingcode) {
-        this.clearingcode = clearingcode;
-    }
+	public void setAccountnumber(String accountnumber) {
+		this.accountnumber = accountnumber;
+	}
 
-    public Short getBranchnumber() {
-        return branchnumber;
-    }
+	public String getAccounttype() {
+		return accounttype;
+	}
 
-    public void setBranchnumber(Short branchnumber) {
-        this.branchnumber = branchnumber;
-    }
+	public void setAccounttype(String accounttype) {
+		this.accounttype = accounttype;
+	}
 
-    public Long getCustomernumber() {
-        return customernumber;
-    }
+	public String getAccountstatus() {
+		return accountstatus;
+	}
 
-    public void setCustomernumber(Long customernumber) {
-        this.customernumber = customernumber;
-    }
+	public void setAccountstatus(String accountstatus) {
+		this.accountstatus = accountstatus;
+	}
 
-    public Short getAccounttype() {
-        return accounttype;
-    }
+	public String getCurrencycode() {
+		return currencycode;
+	}
 
-    public void setAccounttype(Short accounttype) {
-        this.accounttype = accounttype;
-    }
+	public void setCurrencycode(String currencycode) {
+		this.currencycode = currencycode;
+	}
 
-    public String getAccountstatus() {
-        return accountstatus;
-    }
+	public BigDecimal getBalance() {
+		return balance;
+	}
 
-    public void setAccountstatus(String accountstatus) {
-        this.accountstatus = accountstatus == null ? null : accountstatus.trim();
-    }
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
 
-    public String getCurrencycode() {
-        return currencycode;
-    }
+	public Date getLastupdateddate() {
+		return lastupdateddate;
+	}
 
-    public void setCurrencycode(String currencycode) {
-        this.currencycode = currencycode == null ? null : currencycode.trim();
-    }
+	public void setLastupdateddate(Date lastupdateddate) {
+		this.lastupdateddate = lastupdateddate;
+	}
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
+	public String getChequebooktype() {
+		return chequebooktype;
+	}
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
+	public void setChequebooktype(String chequebooktype) {
+		this.chequebooktype = chequebooktype;
+	}
 
-    public Date getLastupdateddate() {
-        return lastupdateddate;
-    }
+	public Short getChequebooksize() {
+		return chequebooksize;
+	}
 
-    public void setLastupdateddate(Date lastupdateddate) {
-        this.lastupdateddate = lastupdateddate;
-    }
+	public void setChequebooksize(Short chequebooksize) {
+		this.chequebooksize = chequebooksize;
+	}
 
-    public String getChequebooktype() {
-        return chequebooktype;
-    }
-
-    public void setChequebooktype(String chequebooktype) {
-        this.chequebooktype = chequebooktype == null ? null : chequebooktype.trim();
-    }
-
-    public Short getChequebooksize() {
-        return chequebooksize;
-    }
-
-    public void setChequebooksize(Short chequebooksize) {
-        this.chequebooksize = chequebooksize;
-    }
+    
 }

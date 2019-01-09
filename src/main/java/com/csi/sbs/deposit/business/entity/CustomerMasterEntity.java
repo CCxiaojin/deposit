@@ -4,20 +4,15 @@ import java.util.Date;
 
 public class CustomerMasterEntity {
 	
-	
-    private String id;
+	private String id;
 
-    private Short clearingcode;
-
-    private Short branchnumber;
-
-    private Integer customernumber;
+    private String customernumber;
 
     private String customername;
 
-    private Long mobilephonenumber;
+    private String mobilephonenumber;
 
-    private Long customerid;
+    private String customerid;
 
     private String issuecountry;
 
@@ -39,7 +34,7 @@ public class CustomerMasterEntity {
 
     private String mailingaddress;
 
-    private Long residencephonenumber;
+    private String residencephonenumber;
 
     private String wechatid;
 
@@ -55,233 +50,223 @@ public class CustomerMasterEntity {
 
     private String companyaddress;
 
-    private Long companyphonenumber;
+    private String companyphonenumber;
 
     private Short yearsofservices;
 
     private Integer monthlysalary;
+    
+    
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public Short getClearingcode() {
-        return clearingcode;
-    }
+	public String getCustomernumber() {
+		return customernumber;
+	}
 
-    public void setClearingcode(Short clearingcode) {
-        this.clearingcode = clearingcode;
-    }
+	public void setCustomernumber(String customernumber) {
+		this.customernumber = customernumber;
+	}
 
-    public Short getBranchnumber() {
-        return branchnumber;
-    }
+	public String getCustomername() {
+		return customername;
+	}
 
-    public void setBranchnumber(Short branchnumber) {
-        this.branchnumber = branchnumber;
-    }
+	public void setCustomername(String customername) {
+		this.customername = customername;
+	}
 
-    public Integer getCustomernumber() {
-        return customernumber;
-    }
+	public String getMobilephonenumber() {
+		return mobilephonenumber;
+	}
 
-    public void setCustomernumber(Integer customernumber) {
-        this.customernumber = customernumber;
-    }
+	public void setMobilephonenumber(String mobilephonenumber) {
+		this.mobilephonenumber = mobilephonenumber;
+	}
 
-    public String getCustomername() {
-        return customername;
-    }
+	public String getCustomerid() {
+		return customerid;
+	}
 
-    public void setCustomername(String customername) {
-        this.customername = customername == null ? null : customername.trim();
-    }
+	public void setCustomerid(String customerid) {
+		this.customerid = customerid;
+	}
 
-    public Long getMobilephonenumber() {
-        return mobilephonenumber;
-    }
+	public String getIssuecountry() {
+		return issuecountry;
+	}
 
-    public void setMobilephonenumber(Long mobilephonenumber) {
-        this.mobilephonenumber = mobilephonenumber;
-    }
+	public void setIssuecountry(String issuecountry) {
+		this.issuecountry = issuecountry;
+	}
 
-    public Long getCustomerid() {
-        return customerid;
-    }
+	public Date getDateofbirth() {
+		return dateofbirth;
+	}
 
-    public void setCustomerid(Long customerid) {
-        this.customerid = customerid;
-    }
+	public void setDateofbirth(Date dateofbirth) {
+		this.dateofbirth = dateofbirth;
+	}
 
-    public String getIssuecountry() {
-        return issuecountry;
-    }
+	public String getChinesename() {
+		return chinesename;
+	}
 
-    public void setIssuecountry(String issuecountry) {
-        this.issuecountry = issuecountry == null ? null : issuecountry.trim();
-    }
+	public void setChinesename(String chinesename) {
+		this.chinesename = chinesename;
+	}
 
-    public Date getDateofbirth() {
-        return dateofbirth;
-    }
+	public String getGender() {
+		return gender;
+	}
 
-    public void setDateofbirth(Date dateofbirth) {
-        this.dateofbirth = dateofbirth;
-    }
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 
-    public String getChinesename() {
-        return chinesename;
-    }
+	public String getNationality() {
+		return nationality;
+	}
 
-    public void setChinesename(String chinesename) {
-        this.chinesename = chinesename == null ? null : chinesename.trim();
-    }
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
 
-    public String getGender() {
-        return gender;
-    }
+	public String getPermanentresidencestatus() {
+		return permanentresidencestatus;
+	}
 
-    public void setGender(String gender) {
-        this.gender = gender == null ? null : gender.trim();
-    }
+	public void setPermanentresidencestatus(String permanentresidencestatus) {
+		this.permanentresidencestatus = permanentresidencestatus;
+	}
 
-    public String getNationality() {
-        return nationality;
-    }
+	public String getMaritalstatus() {
+		return maritalstatus;
+	}
 
-    public void setNationality(String nationality) {
-        this.nationality = nationality == null ? null : nationality.trim();
-    }
+	public void setMaritalstatus(String maritalstatus) {
+		this.maritalstatus = maritalstatus;
+	}
 
-    public String getPermanentresidencestatus() {
-        return permanentresidencestatus;
-    }
+	public String getEducation() {
+		return education;
+	}
 
-    public void setPermanentresidencestatus(String permanentresidencestatus) {
-        this.permanentresidencestatus = permanentresidencestatus == null ? null : permanentresidencestatus.trim();
-    }
+	public void setEducation(String education) {
+		this.education = education;
+	}
 
-    public String getMaritalstatus() {
-        return maritalstatus;
-    }
+	public String getResidentialaddress() {
+		return residentialaddress;
+	}
 
-    public void setMaritalstatus(String maritalstatus) {
-        this.maritalstatus = maritalstatus == null ? null : maritalstatus.trim();
-    }
+	public void setResidentialaddress(String residentialaddress) {
+		this.residentialaddress = residentialaddress;
+	}
 
-    public String getEducation() {
-        return education;
-    }
+	public String getMailingaddress() {
+		return mailingaddress;
+	}
 
-    public void setEducation(String education) {
-        this.education = education == null ? null : education.trim();
-    }
+	public void setMailingaddress(String mailingaddress) {
+		this.mailingaddress = mailingaddress;
+	}
 
-    public String getResidentialaddress() {
-        return residentialaddress;
-    }
+	public String getResidencephonenumber() {
+		return residencephonenumber;
+	}
 
-    public void setResidentialaddress(String residentialaddress) {
-        this.residentialaddress = residentialaddress == null ? null : residentialaddress.trim();
-    }
+	public void setResidencephonenumber(String residencephonenumber) {
+		this.residencephonenumber = residencephonenumber;
+	}
 
-    public String getMailingaddress() {
-        return mailingaddress;
-    }
+	public String getWechatid() {
+		return wechatid;
+	}
 
-    public void setMailingaddress(String mailingaddress) {
-        this.mailingaddress = mailingaddress == null ? null : mailingaddress.trim();
-    }
+	public void setWechatid(String wechatid) {
+		this.wechatid = wechatid;
+	}
 
-    public Long getResidencephonenumber() {
-        return residencephonenumber;
-    }
+	public String getAccommodation() {
+		return accommodation;
+	}
 
-    public void setResidencephonenumber(Long residencephonenumber) {
-        this.residencephonenumber = residencephonenumber;
-    }
+	public void setAccommodation(String accommodation) {
+		this.accommodation = accommodation;
+	}
 
-    public String getWechatid() {
-        return wechatid;
-    }
+	public Short getYearsofresidence() {
+		return yearsofresidence;
+	}
 
-    public void setWechatid(String wechatid) {
-        this.wechatid = wechatid == null ? null : wechatid.trim();
-    }
+	public void setYearsofresidence(Short yearsofresidence) {
+		this.yearsofresidence = yearsofresidence;
+	}
 
-    public String getAccommodation() {
-        return accommodation;
-    }
+	public String getOccupation() {
+		return occupation;
+	}
 
-    public void setAccommodation(String accommodation) {
-        this.accommodation = accommodation == null ? null : accommodation.trim();
-    }
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
 
-    public Short getYearsofresidence() {
-        return yearsofresidence;
-    }
+	public String getEmployercompanyname() {
+		return employercompanyname;
+	}
 
-    public void setYearsofresidence(Short yearsofresidence) {
-        this.yearsofresidence = yearsofresidence;
-    }
+	public void setEmployercompanyname(String employercompanyname) {
+		this.employercompanyname = employercompanyname;
+	}
 
-    public String getOccupation() {
-        return occupation;
-    }
+	public String getPosition() {
+		return position;
+	}
 
-    public void setOccupation(String occupation) {
-        this.occupation = occupation == null ? null : occupation.trim();
-    }
+	public void setPosition(String position) {
+		this.position = position;
+	}
 
-    public String getEmployercompanyname() {
-        return employercompanyname;
-    }
+	public String getCompanyaddress() {
+		return companyaddress;
+	}
 
-    public void setEmployercompanyname(String employercompanyname) {
-        this.employercompanyname = employercompanyname == null ? null : employercompanyname.trim();
-    }
+	public void setCompanyaddress(String companyaddress) {
+		this.companyaddress = companyaddress;
+	}
 
-    public String getPosition() {
-        return position;
-    }
+	public String getCompanyphonenumber() {
+		return companyphonenumber;
+	}
 
-    public void setPosition(String position) {
-        this.position = position == null ? null : position.trim();
-    }
+	public void setCompanyphonenumber(String companyphonenumber) {
+		this.companyphonenumber = companyphonenumber;
+	}
 
-    public String getCompanyaddress() {
-        return companyaddress;
-    }
+	public Short getYearsofservices() {
+		return yearsofservices;
+	}
 
-    public void setCompanyaddress(String companyaddress) {
-        this.companyaddress = companyaddress == null ? null : companyaddress.trim();
-    }
+	public void setYearsofservices(Short yearsofservices) {
+		this.yearsofservices = yearsofservices;
+	}
 
-    public Long getCompanyphonenumber() {
-        return companyphonenumber;
-    }
+	public Integer getMonthlysalary() {
+		return monthlysalary;
+	}
 
-    public void setCompanyphonenumber(Long companyphonenumber) {
-        this.companyphonenumber = companyphonenumber;
-    }
+	public void setMonthlysalary(Integer monthlysalary) {
+		this.monthlysalary = monthlysalary;
+	}
 
-    public Short getYearsofservices() {
-        return yearsofservices;
-    }
-
-    public void setYearsofservices(Short yearsofservices) {
-        this.yearsofservices = yearsofservices;
-    }
-
-    public Integer getMonthlysalary() {
-        return monthlysalary;
-    }
-
-    public void setMonthlysalary(Integer monthlysalary) {
-        this.monthlysalary = monthlysalary;
-    }
+    
+    
+    
 }

@@ -5,11 +5,7 @@ import java.util.Date;
 public class CustomerMasterModel {
 	
 	
-    private String id;
-
-    private String clearingcode;
-
-    private String branchnumber;
+	private String id;
 
     private String customernumber;
 
@@ -60,6 +56,9 @@ public class CustomerMasterModel {
     private Short yearsofservices;
 
     private Integer monthlysalary;
+    
+    
+    
 
 	public String getId() {
 		return id;
@@ -67,22 +66,6 @@ public class CustomerMasterModel {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getClearingcode() {
-		return clearingcode;
-	}
-
-	public void setClearingcode(String clearingcode) {
-		this.clearingcode = clearingcode;
-	}
-
-	public String getBranchnumber() {
-		return branchnumber;
-	}
-
-	public void setBranchnumber(String branchnumber) {
-		this.branchnumber = branchnumber;
 	}
 
 	public String getCustomernumber() {
@@ -284,6 +267,5 @@ public class CustomerMasterModel {
 	public void setMonthlysalary(Integer monthlysalary) {
 		this.monthlysalary = monthlysalary;
 	}
-
     
 }
