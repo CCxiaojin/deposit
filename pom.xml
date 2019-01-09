@@ -61,16 +61,16 @@
         </dependency>
         
         <dependency>
+           <groupId>com.alibaba</groupId>
+           <artifactId>fastjson</artifactId>
+           <version>1.2.47</version>
+        </dependency>
+        
+        <dependency>
            <groupId>com.csi.sbs</groupId>
            <artifactId>common</artifactId>
            <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        
-        
-        
-        
-       
-        
         
         <!-- 引入模板引擎jar包 -->
         <dependency>
