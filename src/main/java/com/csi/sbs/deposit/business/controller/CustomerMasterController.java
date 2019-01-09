@@ -54,9 +54,20 @@ public class CustomerMasterController {
         		   return objectMapper.writeValueAsString(map);
         	   }
         	   
-        	   String params = "{\"item\":\"ClearingCode,BranchNumber,LocalCcy\"}";
-        	   String result = ConnPostClient.postJson("http://localhost:8083/sysconfig/query", params);
-               if(result==null){
+        	   //调用服务接口地址
+        	   String params1 = "{\"apiname\":\"query\"}";
+        	   String result1 = ConnPostClient.postJson("http://localhost:8083/sysadmin/getServiceInternalURL", params1);
+               if(result1==null){
+            	   map.put("msg", "调用系统参数失败");
+            	   map.put("code", "0");
+               }
+               
+               JSONObject jsonObject1 = (JSONObject) JSON.parse(result1);
+               String path = jsonObject1.getString("internaURL");
+        	   
+        	   String params2 = "{\"item\":\"ClearingCode,BranchNumber,LocalCcy\"}";
+        	   String result2 = ConnPostClient.postJson(path, params2);
+               if(result2==null){
             	   map.put("msg", "调用系统参数失败");
             	   map.put("code", "0");
                }
@@ -64,14 +75,12 @@ public class CustomerMasterController {
                //返回数据处理
                JSONArray jsonArray = new JSONArray();
                JSONObject jsonObject = new JSONObject();
-               jsonArray= JSON.parseArray(result);
+               jsonArray= JSON.parseArray(result2);
                String clearcode = "";
                String branchnumber = "";
                String localCCy = "";
                for(int i=0;i<jsonArray.size();i++){
-            	  //System.out.println(jsonArray.get(i));
             	  jsonObject = (JSONObject) JSON.parse(jsonArray.get(i).toString());
-            	  //System.out.println(jsonObject.get("item"));
             	  if(jsonObject.get("item").equals("BranchNumber")){
             		  branchnumber = jsonObject.get("value").toString();
             	  }
