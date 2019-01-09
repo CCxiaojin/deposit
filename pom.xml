@@ -60,6 +60,18 @@
            <scope>provided</scope>
         </dependency>
         
+        <dependency>
+           <groupId>com.csi.sbs</groupId>
+           <artifactId>common</artifactId>
+           <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        
+        
+        
+        
+       
+        
+        
         <!-- 引入模板引擎jar包 -->
         <dependency>
            <groupId>org.springframework.boot</groupId>
@@ -74,6 +86,31 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <executions>
+                  <execution>
+                     <id>install-common</id>
+                     <phase>clean</phase>
+                     <configuration>
+                       <file>C:/Users/gaonana/Desktop/common.jar</file>
+                         <repositoryLayout>default</repositoryLayout>
+                         <groupId>com.csi.sbs</groupId>
+                         <artifactId>common</artifactId>
+                         <version>0.0.1-SNAPSHOT</version>
+                         <packaging>jar</packaging>
+                         <generatePom>true</generatePom>
+                     </configuration>
+                     <goals>
+                       <goal>install-file</goal>
+                     </goals>
+                   </execution>
+                 </executions>
+              </plugin>  -->
+
 		</plugins>
 		<finalName>deposit</finalName>
 	</build>
