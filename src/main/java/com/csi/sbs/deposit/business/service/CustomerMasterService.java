@@ -10,6 +10,6 @@ public interface CustomerMasterService {
 	
 	   public List<CustomerMasterEntity> queryAll();
 	   
-	   public void createCustomer(CustomerAndAccountModel cam);
+	   public String createCustomer(CustomerAndAccountModel cam);
 
 }

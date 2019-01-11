@@ -23,7 +23,7 @@
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
   
-  <insert id="insert" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+  <insert id="insert" keyProperty="accountnumber" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
     insert into t_account_master
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

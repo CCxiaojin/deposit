@@ -54,7 +54,7 @@ public class CustomerMasterController {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(value = "/{openingSavingAccount}", method = RequestMethod.POST)
+	@RequestMapping(value = "/openingSavingAccount", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for create savingaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
@@ -70,9 +70,10 @@ public class CustomerMasterController {
 			cam.getAccount().setCurrencycode(
 					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(cam)), "localCCy"));
 			cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE1);
-			customerMasterService.createCustomer(cam);
-			writeLog();
+			String accountNumber = customerMasterService.createCustomer(cam);
+			writeLog(accountNumber);
 			map.put("msg", "创建成功");
+			map.put("accountNumber", accountNumber);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
@@ -89,7 +90,7 @@ public class CustomerMasterController {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(value = "/{openingCurrentAccount}", method = RequestMethod.POST)
+	@RequestMapping(value = "/openingCurrentAccount", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for create currentaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
@@ -105,9 +106,10 @@ public class CustomerMasterController {
 			cam.getAccount().setCurrencycode(
 					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(cam)), "localCCy"));
 			cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
-			customerMasterService.createCustomer(cam);
-			writeLog();
+			String accountNumber = customerMasterService.createCustomer(cam);
+			writeLog(accountNumber);
 			map.put("msg", "创建成功");
+			map.put("accountNumber", accountNumber);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
@@ -124,7 +126,7 @@ public class CustomerMasterController {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(value = "/{openingFEAccount}", method = RequestMethod.POST)
+	@RequestMapping(value = "/openingFEAccount", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for create feaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
@@ -139,9 +141,10 @@ public class CustomerMasterController {
 			}
 			cam.getAccount().setBalance(new BigDecimal(0));
 			cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE3);
-			customerMasterService.createCustomer(cam);
-			writeLog();
+			String accountNumber = customerMasterService.createCustomer(cam);
+			writeLog(accountNumber);
 			map.put("msg", "创建成功");
+			map.put("accountNumber", accountNumber);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
@@ -158,7 +161,7 @@ public class CustomerMasterController {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(value = "/{openingTDAccount}", method = RequestMethod.POST)
+	@RequestMapping(value = "/openingTDAccount", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for create tdaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
@@ -172,9 +175,10 @@ public class CustomerMasterController {
 				return commonBusinessProcess(cam);
 			}
 			cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE4);
-			customerMasterService.createCustomer(cam);
-			writeLog();
+			String accountNumber = customerMasterService.createCustomer(cam);
+			writeLog(accountNumber);
 			map.put("msg", "创建成功");
+			map.put("accountNumber", accountNumber);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
@@ -266,7 +270,7 @@ public class CustomerMasterController {
 		return objectMapper.writeValueAsString(map);
 	}
 
-	private boolean writeLog() {
+	private boolean writeLog(String accountNumber) {
 		try {
 			// 插入日志
 			String path = "http://localhost:8083/sysadmin/log/writeTransactionLog";
@@ -278,7 +282,7 @@ public class CustomerMasterController {
 		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
 		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
 		    log.setOperationdate(sf.parse(sf.format(new Date())));
-		    log.setOperationdetail("create account success!");
+		    log.setOperationdetail("create accountNumber:"+accountNumber+" success!");
 			ConnPostClient.postJson(path, JsonProcess.changeEntityTOJSON(log));
 		} catch (Exception e) {
           return false;
