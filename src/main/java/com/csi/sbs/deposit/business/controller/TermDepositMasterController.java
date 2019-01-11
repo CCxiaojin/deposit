@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.csi.sbs.common.business.httpclient.ConnPostClient;
+import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.TermDepositMasterModel;
 import com.csi.sbs.deposit.business.service.TermDepositMasterService;
-import com.csi.sbs.deposit.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.util.ValidateTDMaster;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
