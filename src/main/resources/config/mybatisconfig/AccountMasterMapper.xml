@@ -5,11 +5,11 @@
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="AccountNumber" property="accountnumber" jdbcType="VARCHAR" />
     <result column="AccountType" property="accounttype" jdbcType="VARCHAR" />
-    <result column="AccountStatus" property="accountstatus" jdbcType="CHAR" />
-    <result column="CurrencyCode" property="currencycode" jdbcType="CHAR" />
+    <result column="AccountStatus" property="accountstatus" jdbcType="VARCHAR" />
+    <result column="CurrencyCode" property="currencycode" jdbcType="VARCHAR" />
     <result column="Balance" property="balance" jdbcType="DECIMAL" />
     <result column="LastUpdatedDate" property="lastupdateddate" jdbcType="TIMESTAMP" />
-    <result column="ChequeBookType" property="chequebooktype" jdbcType="CHAR" />
+    <result column="ChequeBookType" property="chequebooktype" jdbcType="VARCHAR" />
     <result column="ChequeBookSize" property="chequebooksize" jdbcType="DECIMAL" />
   </resultMap>
   
@@ -65,10 +65,10 @@
         #{accounttype,jdbcType=VARCHAR},
       </if>
       <if test="accountstatus != null" >
-        #{accountstatus,jdbcType=CHAR},
+        #{accountstatus,jdbcType=VARCHAR},
       </if>
       <if test="currencycode != null" >
-        #{currencycode,jdbcType=CHAR},
+        #{currencycode,jdbcType=VARCHAR},
       </if>
       <if test="balance != null" >
         #{balance,jdbcType=DECIMAL},
@@ -77,7 +77,7 @@
         #{lastupdateddate,jdbcType=TIMESTAMP},
       </if>
       <if test="chequebooktype != null" >
-        #{chequebooktype,jdbcType=CHAR},
+        #{chequebooktype,jdbcType=VARCHAR},
       </if>
       <if test="chequebooksize != null" >
         #{chequebooksize,jdbcType=DECIMAL},
@@ -95,10 +95,10 @@
         AccountType = #{accounttype,jdbcType=VARCHAR},
       </if>
       <if test="accountstatus != null" >
-        AccountStatus = #{accountstatus,jdbcType=CHAR},
+        AccountStatus = #{accountstatus,jdbcType=VARCHAR},
       </if>
       <if test="currencycode != null" >
-        CurrencyCode = #{currencycode,jdbcType=CHAR},
+        CurrencyCode = #{currencycode,jdbcType=VARCHAR},
       </if>
       <if test="balance != null" >
         Balance = #{balance,jdbcType=DECIMAL},
@@ -107,7 +107,7 @@
         LastUpdatedDate = #{lastupdateddate,jdbcType=TIMESTAMP},
       </if>
       <if test="chequebooktype != null" >
-        ChequeBookType = #{chequebooktype,jdbcType=CHAR},
+        ChequeBookType = #{chequebooktype,jdbcType=VARCHAR},
       </if>
       <if test="chequebooksize != null" >
         ChequeBookSize = #{chequebooksize,jdbcType=DECIMAL},

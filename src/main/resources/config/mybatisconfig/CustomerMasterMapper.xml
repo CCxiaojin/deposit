@@ -10,16 +10,16 @@
     <result column="IssueCountry" property="issuecountry" jdbcType="VARCHAR" />
     <result column="DateOfBirth" property="dateofbirth" jdbcType="TIMESTAMP" />
     <result column="ChineseName" property="chinesename" jdbcType="VARCHAR" />
-    <result column="Gender" property="gender" jdbcType="CHAR" />
+    <result column="Gender" property="gender" jdbcType="VARCHAR" />
     <result column="Nationality" property="nationality" jdbcType="VARCHAR" />
-    <result column="PermanentResidenceStatus" property="permanentresidencestatus" jdbcType="CHAR" />
-    <result column="MaritalStatus" property="maritalstatus" jdbcType="CHAR" />
-    <result column="Education" property="education" jdbcType="CHAR" />
+    <result column="PermanentResidenceStatus" property="permanentresidencestatus" jdbcType="VARCHAR" />
+    <result column="MaritalStatus" property="maritalstatus" jdbcType="VARCHAR" />
+    <result column="Education" property="education" jdbcType="VARCHAR" />
     <result column="ResidentialAddress" property="residentialaddress" jdbcType="VARCHAR" />
     <result column="MailingAddress" property="mailingaddress" jdbcType="VARCHAR" />
     <result column="ResidencePhoneNumber" property="residencephonenumber" jdbcType="VARCHAR" />
     <result column="WeChatID" property="wechatid" jdbcType="VARCHAR" />
-    <result column="Accommodation" property="accommodation" jdbcType="CHAR" />
+    <result column="Accommodation" property="accommodation" jdbcType="VARCHAR" />
     <result column="YearsOfResidence" property="yearsofresidence" jdbcType="DECIMAL" />
     <result column="Occupation" property="occupation" jdbcType="VARCHAR" />
     <result column="EmployerCompanyName" property="employercompanyname" jdbcType="VARCHAR" />
@@ -148,19 +148,19 @@
         #{chinesename,jdbcType=VARCHAR},
       </if>
       <if test="gender != null" >
-        #{gender,jdbcType=CHAR},
+        #{gender,jdbcType=VARCHAR},
       </if>
       <if test="nationality != null" >
         #{nationality,jdbcType=VARCHAR},
       </if>
       <if test="permanentresidencestatus != null" >
-        #{permanentresidencestatus,jdbcType=CHAR},
+        #{permanentresidencestatus,jdbcType=VARCHAR},
       </if>
       <if test="maritalstatus != null" >
-        #{maritalstatus,jdbcType=CHAR},
+        #{maritalstatus,jdbcType=VARCHAR},
       </if>
       <if test="education != null" >
-        #{education,jdbcType=CHAR},
+        #{education,jdbcType=VARCHAR},
       </if>
       <if test="residentialaddress != null" >
         #{residentialaddress,jdbcType=VARCHAR},
@@ -175,7 +175,7 @@
         #{wechatid,jdbcType=VARCHAR},
       </if>
       <if test="accommodation != null" >
-        #{accommodation,jdbcType=CHAR},
+        #{accommodation,jdbcType=VARCHAR},
       </if>
       <if test="yearsofresidence != null" >
         #{yearsofresidence,jdbcType=DECIMAL},
@@ -229,19 +229,19 @@
         ChineseName = #{chinesename,jdbcType=VARCHAR},
       </if>
       <if test="gender != null" >
-        Gender = #{gender,jdbcType=CHAR},
+        Gender = #{gender,jdbcType=VARCHAR},
       </if>
       <if test="nationality != null" >
         Nationality = #{nationality,jdbcType=VARCHAR},
       </if>
       <if test="permanentresidencestatus != null" >
-        PermanentResidenceStatus = #{permanentresidencestatus,jdbcType=CHAR},
+        PermanentResidenceStatus = #{permanentresidencestatus,jdbcType=VARCHAR},
       </if>
       <if test="maritalstatus != null" >
-        MaritalStatus = #{maritalstatus,jdbcType=CHAR},
+        MaritalStatus = #{maritalstatus,jdbcType=VARCHAR},
       </if>
       <if test="education != null" >
-        Education = #{education,jdbcType=CHAR},
+        Education = #{education,jdbcType=VARCHAR},
       </if>
       <if test="residentialaddress != null" >
         ResidentialAddress = #{residentialaddress,jdbcType=VARCHAR},
@@ -256,7 +256,7 @@
         WeChatID = #{wechatid,jdbcType=VARCHAR},
       </if>
       <if test="accommodation != null" >
-        Accommodation = #{accommodation,jdbcType=CHAR},
+        Accommodation = #{accommodation,jdbcType=VARCHAR},
       </if>
       <if test="yearsofresidence != null" >
         YearsOfResidence = #{yearsofresidence,jdbcType=DECIMAL},

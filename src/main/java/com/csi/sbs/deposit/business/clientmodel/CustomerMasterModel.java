@@ -2,6 +2,10 @@ package com.csi.sbs.deposit.business.clientmodel;
 
 import java.util.Date;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel
 public class CustomerMasterModel {
 	
 	
@@ -9,14 +13,19 @@ public class CustomerMasterModel {
 
     private String customernumber;
 
+    @ApiModelProperty(required=true)
     private String customername;
 
+    @ApiModelProperty(required=true)
     private String mobilephonenumber;
 
+    @ApiModelProperty(required=true)
     private String customerid;
 
+    @ApiModelProperty(required=true)
     private String issuecountry;
 
+    @ApiModelProperty(required=true)
     private Date dateofbirth;
 
     private String chinesename;
@@ -33,6 +42,7 @@ public class CustomerMasterModel {
 
     private String residentialaddress;
 
+    @ApiModelProperty(required=true)
     private String mailingaddress;
 
     private String residencephonenumber;
