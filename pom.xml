@@ -69,7 +69,7 @@
         <dependency>
            <groupId>com.csi.sbs</groupId>
            <artifactId>common</artifactId>
-           <version>0.0.1-SNAPSHOT</version>
+           <version>0.0.1</version>
         </dependency>
         
         <!-- 引入模板引擎jar包 -->
@@ -85,34 +85,23 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			
-			<!-- <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-                <executions>
-                  <execution>
-                     <id>install-common</id>
-                     <phase>clean</phase>
-                     <configuration>
-                       <file>C:/Users/gaonana/Desktop/common.jar</file>
-                         <repositoryLayout>default</repositoryLayout>
-                         <groupId>com.csi.sbs</groupId>
-                         <artifactId>common</artifactId>
-                         <version>0.0.1-SNAPSHOT</version>
-                         <packaging>jar</packaging>
-                         <generatePom>true</generatePom>
-                     </configuration>
-                     <goals>
-                       <goal>install-file</goal>
-                     </goals>
-                   </execution>
-                 </executions>
-              </plugin>  -->
-
+			</plugin>					
 		</plugins>
 		<finalName>deposit</finalName>
 	</build>
+	
+	<distributionManagement>
+		<repository>
+			<id>sbs-releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://117.78.38.89:8081/repository/sbs-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>sbs-snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://117.78.38.89:8081/repository/sbs-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
 
 </project>
