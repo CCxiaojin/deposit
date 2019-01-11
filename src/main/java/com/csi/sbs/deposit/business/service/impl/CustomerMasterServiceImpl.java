@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.csi.sbs.common.business.httpclient.ConnPostClient;
+import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
 import com.csi.sbs.deposit.business.dao.AccountMasterDao;
 import com.csi.sbs.deposit.business.dao.CustomerMasterDao;
