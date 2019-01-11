@@ -3,6 +3,11 @@ package com.csi.sbs.deposit.business.clientmodel;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+
+@ApiModel
 public class AccountMasterModel {
 	
     
@@ -14,6 +19,7 @@ public class AccountMasterModel {
 
     private String accountstatus;
 
+    @ApiModelProperty(required=true)
     private String currencycode;
 
     private BigDecimal balance;

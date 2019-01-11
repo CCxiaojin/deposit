@@ -18,19 +18,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.csi.sbs.common.business.httpclient.ConnGetClient;
 import com.csi.sbs.common.business.httpclient.ConnPostClient;
+import com.csi.sbs.common.business.json.JsonProcess;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
+import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.service.CustomerMasterService;
 import com.csi.sbs.deposit.business.util.UUIDUtil;
 
 
 @CrossOrigin//解决跨域请求
 @Controller
-@RequestMapping("/deposit")
+@RequestMapping("/deposit/account")
+@Api(value = "Then controller is deposit account")
 public class CustomerMasterController {
 	
 	
@@ -40,73 +47,27 @@ public class CustomerMasterController {
 	   
        ObjectMapper objectMapper = new ObjectMapper();
        
-       @RequestMapping(value = "/{createAccount}", method = RequestMethod.POST)
+       /**
+        * 开普通账号
+        * @param cam
+        * @return
+        * @throws JsonProcessingException
+        */
+       @RequestMapping(value = "/{openingSavingAccount}", method = RequestMethod.POST)
        @ResponseBody
-   	   public String createAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException{
+       @ApiOperation(value = "This api is for create savingaccount", notes = "version 0.0.1")
+   	   @ApiResponses({
+   		   @ApiResponse(code = 0, message = "Create Fail!"),
+   		   @ApiResponse(code = 1, message = "Create Success!")
+   	   })
+       @ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
+   	   public String openingSavingAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException{
            Map<String,Object> map = new HashMap<String,Object>();
            try{
-        	   //先校验字段
-        	   boolean validateFlag = validateField(cam);
-        	   if(!validateFlag){
-        		   map.put("msg", "必填字段不全");
-        		   map.put("code", "0");
-        		   
-        		   return objectMapper.writeValueAsString(map);
+        	   if(!commonBusinessProcess(cam).equals("1")){
+        		   return commonBusinessProcess(cam);
         	   }
-        	   
-        	   //调用服务接口地址
-        	   String params1 = "{\"apiname\":\"query\"}";
-        	   String result1 = ConnPostClient.postJson("http://localhost:8083/sysadmin/getServiceInternalURL", params1);
-               if(result1==null){
-            	   map.put("msg", "调用系统参数失败");
-            	   map.put("code", "0");
-               }
-               
-               JSONObject jsonObject1 = (JSONObject) JSON.parse(result1);
-               String path = jsonObject1.getString("internaURL");
-        	   
-        	   String params2 = "{\"item\":\"ClearingCode,BranchNumber,LocalCcy\"}";
-        	   String result2 = ConnPostClient.postJson(path, params2);
-               if(result2==null){
-            	   map.put("msg", "调用系统参数失败");
-            	   map.put("code", "0");
-               }
-        	   
-               //返回数据处理
-               JSONArray jsonArray = new JSONArray();
-               JSONObject jsonObject = new JSONObject();
-               jsonArray= JSON.parseArray(result2);
-               String clearcode = "";
-               String branchnumber = "";
-               String localCCy = "";
-               for(int i=0;i<jsonArray.size();i++){
-            	  jsonObject = (JSONObject) JSON.parse(jsonArray.get(i).toString());
-            	  if(jsonObject.get("item").equals("BranchNumber")){
-            		  branchnumber = jsonObject.get("value").toString();
-            	  }
-            	  if(jsonObject.get("item").equals("ClearingCode")){
-            		  clearcode = jsonObject.get("value").toString();
-            	  }
-            	  if(jsonObject.get("item").equals("LocalCcy")){
-            		  localCCy = jsonObject.get("value").toString();
-            	  }
-               }
-               
-               //判断账号类型
-               if(cam.getAccount().getAccounttype().equals("001") || cam.getAccount().getAccounttype().equals("002")){
-            	   cam.getAccount().setCurrencycode(localCCy);
-            	   cam.getAccount().setBalance(new BigDecimal(0));
-               }
-               if(cam.getAccount().getAccounttype().equals("003")){
-            	   cam.getAccount().setBalance(new BigDecimal(0));
-               }
-               
-               cam.getCustomer().setCustomernumber(clearcode+branchnumber);
-               cam.getCustomer().setId(UUIDUtil.generateUUID());
-               
-               cam.getAccount().setId(UUIDUtil.generateUUID());
-               cam.getAccount().setAccountnumber(clearcode+branchnumber);
-               
+        	   cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE1);
                customerMasterService.createCustomer(cam);
                map.put("msg", "创建成功");
                map.put("code", "1");
@@ -117,6 +78,187 @@ public class CustomerMasterController {
            			  
 		   return objectMapper.writeValueAsString(map);
    	   }
+       
+       /**
+        * 开支票账号
+        * @param cam
+        * @return
+        * @throws JsonProcessingException
+        */
+       @RequestMapping(value = "/{openingCurrentAccount}", method = RequestMethod.POST)
+       @ResponseBody
+       @ApiOperation(value = "This api is for create currentaccount", notes = "version 0.0.1")
+   	   @ApiResponses({
+   		   @ApiResponse(code = 0, message = "Create Fail!"),
+   		   @ApiResponse(code = 1, message = "Create Success!")
+   	   })
+       @ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
+   	   public String openingCurrentAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException{
+           Map<String,Object> map = new HashMap<String,Object>();
+           try{
+        	   if(!commonBusinessProcess(cam).equals("1")){
+        		   return commonBusinessProcess(cam);
+        	   }
+        	   cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
+               customerMasterService.createCustomer(cam);
+               map.put("msg", "创建成功");
+               map.put("code", "1");
+           }catch(Exception e){
+        	   map.put("msg", "创建失败");
+               map.put("code", "0");
+           }
+           			  
+		   return objectMapper.writeValueAsString(map);
+   	   }
+       
+       /**
+        * 开外汇账号
+        * @param cam
+        * @return
+        * @throws JsonProcessingException
+        */
+       @RequestMapping(value = "/{openingFEAccount}", method = RequestMethod.POST)
+       @ResponseBody
+       @ApiOperation(value = "This api is for create feaccount", notes = "version 0.0.1")
+   	   @ApiResponses({
+   		   @ApiResponse(code = 0, message = "Create Fail!"),
+   		   @ApiResponse(code = 1, message = "Create Success!")
+   	   })
+       @ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
+   	   public String openingFEAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException{
+           Map<String,Object> map = new HashMap<String,Object>();
+           try{
+        	   if(!commonBusinessProcess(cam).equals("1")){
+        		   return commonBusinessProcess(cam);
+        	   }
+        	   cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE3);
+               customerMasterService.createCustomer(cam);
+               map.put("msg", "创建成功");
+               map.put("code", "1");
+           }catch(Exception e){
+        	   map.put("msg", "创建失败");
+               map.put("code", "0");
+           }
+           			  
+		   return objectMapper.writeValueAsString(map);
+   	   }
+       
+       /**
+        * 开定存账号
+        * @param cam
+        * @return
+        * @throws JsonProcessingException
+        */
+       @RequestMapping(value = "/{openingTDAccount}", method = RequestMethod.POST)
+       @ResponseBody
+       @ApiOperation(value = "This api is for create tdaccount", notes = "version 0.0.1")
+   	   @ApiResponses({
+   		   @ApiResponse(code = 0, message = "Create Fail!"),
+   		   @ApiResponse(code = 1, message = "Create Success!")
+   	   })
+       @ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
+   	   public String openingTDAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException{
+           Map<String,Object> map = new HashMap<String,Object>();
+           try{
+        	   if(!commonBusinessProcess(cam).equals("1")){
+        		   return commonBusinessProcess(cam);
+        	   }
+               cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE4);
+               customerMasterService.createCustomer(cam);
+               map.put("msg", "创建成功");
+               map.put("code", "1");
+           }catch(Exception e){
+        	   map.put("msg", "创建失败");
+               map.put("code", "0");
+           }
+           			  
+		   return objectMapper.writeValueAsString(map);
+   	   }
+       
+       /**
+        * 创建账号公共业务处理
+        * @param cam
+        * @return
+        * @throws JsonProcessingException 
+        */
+       private String commonBusinessProcess(CustomerAndAccountModel cam) throws JsonProcessingException{
+    	   Map<String,Object> map = new HashMap<String,Object>();
+    	   //先校验字段
+    	   boolean validateFlag = validateField(cam);
+    	   if(!validateFlag){
+    		   map.put("msg", "必填字段不全");
+    		   map.put("code", "0");
+    		   
+    		   return objectMapper.writeValueAsString(map);
+    	   }
+    	   
+    	   //调用服务接口地址
+    	   String params1 = "{\"apiname\":\"getSystemParameter\"}";
+    	   String result1 = ConnPostClient.postJson(SysConstant.SERVICE_INTERNAL_URL, params1);
+           if(result1==null){
+        	   map.put("msg", "调用服务接口地址失败");
+        	   map.put("code", "0");
+           }
+           String path = JsonProcess.returnValue(JsonProcess.changeToJSONObject(result1), "internaURL");
+    	   
+           //调用系统参数服务接口
+    	   String params2 = "{\"item\":\"ClearingCode,BranchNumber,LocalCcy,NextAvailableCustomerNumber\"}";
+    	   String result2 = ConnPostClient.postJson(path, params2);
+           if(result2==null){
+        	   map.put("msg", "调用系统参数失败");
+        	   map.put("code", "0");
+           }
+    	   
+           //返回数据处理
+           String clearcode = "";
+           String branchnumber = "";
+           String localCCy = "";
+           JSONObject jsonObject1 = null;
+           String revalue = null;
+           String temp = null;
+           for(int i=0;i<JsonProcess.changeToJSONArray(result2).size();i++){
+        	  jsonObject1 = JsonProcess.changeToJSONObject(JsonProcess.changeToJSONArray(result2).get(i).toString());
+        	  revalue = JsonProcess.returnValue(jsonObject1, "item");
+        	  temp = JsonProcess.returnValue(jsonObject1, "value");
+        	  if(revalue.equals("BranchNumber")){
+        		  branchnumber = temp;
+        	  }
+        	  if(revalue.equals("ClearingCode")){
+        		  clearcode = temp;
+        	  }
+        	  if(revalue.equals("LocalCcy")){
+        		  localCCy = temp;
+        	  }
+           }
+           
+           //调用可用customerNumber服务接口
+           String customerNumber = "";
+    	   String result3 = ConnGetClient.get("http://localhost:8083/sysadmin/generate/getNextAvailableNumber");
+           if(result3==null){
+        	   map.put("msg", "调用系统参数失败");
+        	   map.put("code", "0");
+           }
+           
+           //返回数据处理
+           customerNumber = JsonProcess.returnValue(JsonProcess.changeToJSONObject(result3), "nextAvailableNumber");
+           
+           //判断账号类型
+           if(cam.getAccount().getAccounttype().equals("001") || cam.getAccount().getAccounttype().equals("002")){
+        	   cam.getAccount().setCurrencycode(localCCy);
+        	   cam.getAccount().setBalance(new BigDecimal(0));
+           }
+           if(cam.getAccount().getAccounttype().equals("003")){
+        	   cam.getAccount().setBalance(new BigDecimal(0));
+           }
+           
+           cam.getCustomer().setCustomernumber(clearcode+branchnumber+customerNumber);
+           cam.getCustomer().setId(UUIDUtil.generateUUID());
+          
+           cam.getAccount().setId(UUIDUtil.generateUUID());
+           cam.getAccount().setAccountnumber(clearcode+branchnumber+customerNumber);
+           
+		   return "1";
+       }
 
        
        /**
@@ -151,9 +293,9 @@ public class CustomerMasterController {
     	   if(cam.getAccount().getCurrencycode()==null || "".equals(cam.getAccount().getCurrencycode())){
     		   return false;
     	   }
-    	   if(cam.getAccount().getAccounttype()==null || "".equals(cam.getAccount().getAccounttype())){
-    		   return false;
-    	   }
+//    	   if(cam.getAccount().getAccounttype()==null || "".equals(cam.getAccount().getAccounttype())){
+//    		   return false;
+//    	   }
     	   
     	   return true;
        }
