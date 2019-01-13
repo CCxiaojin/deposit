@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -29,10 +30,14 @@ import com.csi.sbs.common.business.httpclient.ConnGetClient;
 import com.csi.sbs.common.business.httpclient.ConnPostClient;
 import com.csi.sbs.common.business.json.JsonProcess;
 import com.csi.sbs.common.business.util.UUIDUtil;
+import com.csi.sbs.deposit.business.clientmodel.CloseAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
+import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
 import com.csi.sbs.deposit.business.entity.SysTransactionLogEntity;
+import com.csi.sbs.deposit.business.service.AccountMasterService;
 import com.csi.sbs.deposit.business.service.CustomerMasterService;
+import com.csi.sbs.deposit.business.util.WriteLogUtil;
 
 @CrossOrigin // 解决跨域请求
 @Controller
@@ -42,6 +47,9 @@ public class CustomerMasterController {
 	
 	@Resource
 	private CustomerMasterService customerMasterService;
+	
+	@Resource
+	private AccountMasterService accountMasterService;
 	
 	private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -59,19 +67,21 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for create savingaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
-	public String openingSavingAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException {
+	@ApiImplicitParam(required = true)
+	public String openingSavingAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(cam)), "code")
+			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
 					.equals("1")) {
-				return commonBusinessProcess(cam);
+				return commonBusinessProcess(customerAndAccountModel);
 			}
-			cam.getAccount().setCurrencycode(
-					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(cam)), "localCCy"));
-			cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE1);
-			String accountNumber = customerMasterService.createCustomer(cam);
-			writeLog(accountNumber);
+			customerAndAccountModel.getAccount().setCurrencycode(
+					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
+			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE1);
+			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel);
+			
+			//写入日志
+			createAccountLog(accountNumber);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", accountNumber);
 			map.put("code", "1");
@@ -95,19 +105,20 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for create currentaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
-	public String openingCurrentAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException {
+	@ApiImplicitParam(required = true)
+	public String openingCurrentAccount(@RequestBody CustomerAndAccountModel CustomerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(cam)), "code")
+			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(CustomerAndAccountModel)), "code")
 					.equals("1")) {
-				return commonBusinessProcess(cam);
+				return commonBusinessProcess(CustomerAndAccountModel);
 			}
-			cam.getAccount().setCurrencycode(
-					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(cam)), "localCCy"));
-			cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
-			String accountNumber = customerMasterService.createCustomer(cam);
-			writeLog(accountNumber);
+			CustomerAndAccountModel.getAccount().setCurrencycode(
+					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(CustomerAndAccountModel)), "localCCy"));
+			CustomerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
+			String accountNumber = customerMasterService.createCustomer(CustomerAndAccountModel);
+			//写入日志
+			createAccountLog(accountNumber);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", accountNumber);
 			map.put("code", "1");
@@ -131,18 +142,19 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for create feaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
-	public String openingFEAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException {
+	@ApiImplicitParam(required = true)
+	public String openingFEAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(cam)), "code")
+			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
 					.equals("1")) {
-				return commonBusinessProcess(cam);
+				return commonBusinessProcess(customerAndAccountModel);
 			}
-			cam.getAccount().setBalance(new BigDecimal(0));
-			cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE3);
-			String accountNumber = customerMasterService.createCustomer(cam);
-			writeLog(accountNumber);
+			customerAndAccountModel.getAccount().setBalance(new BigDecimal(0));
+			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE3);
+			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel);
+			//写入日志
+			createAccountLog(accountNumber);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", accountNumber);
 			map.put("code", "1");
@@ -166,22 +178,75 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for create tdaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
-	public String openingTDAccount(@RequestBody CustomerAndAccountModel cam) throws JsonProcessingException {
+	@ApiImplicitParam(required = true)
+	public String openingTDAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(cam)), "code")
+			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
 					.equals("1")) {
-				return commonBusinessProcess(cam);
+				return commonBusinessProcess(customerAndAccountModel);
 			}
-			cam.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE4);
-			String accountNumber = customerMasterService.createCustomer(cam);
-			writeLog(accountNumber);
+			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE4);
+			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel);
+			//写入日志
+			createAccountLog(accountNumber);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", accountNumber);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
+			map.put("code", "0");
+		}
+
+		return objectMapper.writeValueAsString(map);
+	}
+	
+	/**
+	 * 账号关闭
+	 * @param cam
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value = "/accountClosure", method = RequestMethod.POST)
+	@ResponseBody
+	@ApiOperation(value = "This api is for close account", notes = "version 0.0.1")
+	@ApiResponses({ @ApiResponse(code = 0, message = "close Fail!"),
+		@ApiResponse(code = 1, message = "close Success!") })
+    @ApiImplicitParam(required = true)
+	public String accountClosure(@RequestBody CloseAccountModel closeAccountModel) throws JsonProcessingException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			AccountMasterEntity ame = new AccountMasterEntity();
+			ame.setAccountnumber(closeAccountModel.getAccountNumber());
+			ame.setAccounttype(closeAccountModel.getAccountType());
+			//根据accountNumber 和 accountType查询账号
+			List<AccountMasterEntity> accountList = accountMasterService.findAccountByParams(ame);
+			if(accountList==null || accountList.size()==0){
+				map.put("msg", "Record Not Found");
+				map.put("code", "0");
+				return objectMapper.writeValueAsString(map);
+			}
+			//校验账户余额是否大于0
+			int r = accountList.get(0).getBalance().compareTo(BigDecimal.ZERO);
+			if(r!=0){
+				map.put("msg", "Account Balance Not Zero");
+				map.put("code", "0");
+				return objectMapper.writeValueAsString(map);
+			}
+			
+			ame.setAccountstatus(SysConstant.ACCOUNT_STATE1);
+			ame.setLastupdateddate(sf.parse(sf.format(new Date())));
+			if(accountMasterService.closeAccount(ame)>0){
+				map.put("msg", "Account Deleted Success");
+				map.put("code", "1");
+				closeAccountLog(ame.getAccountnumber());
+			}else{
+				map.put("msg", "Account Deleted Fail");
+				map.put("code", "0");
+			}
+			return objectMapper.writeValueAsString(map);
+		} catch (Exception e) {
+			map.put("msg", "Account Deleted Fail");
 			map.put("code", "0");
 		}
 
@@ -270,10 +335,13 @@ public class CustomerMasterController {
 		return objectMapper.writeValueAsString(map);
 	}
 
-	private boolean writeLog(String accountNumber) {
+	/**
+	 * 创建账号日志
+	 * @param accountNumber
+	 * @return
+	 */
+	private boolean createAccountLog(String accountNumber) {
 		try {
-			// 插入日志
-			String path = "http://localhost:8083/sysadmin/log/writeTransactionLog";
 			SysTransactionLogEntity log = new SysTransactionLogEntity();
 		    log.setId(UUIDUtil.generateUUID());
 		    log.setUserid("000000");
@@ -283,7 +351,30 @@ public class CustomerMasterController {
 		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
 		    log.setOperationdate(sf.parse(sf.format(new Date())));
 		    log.setOperationdetail("create accountNumber:"+accountNumber+" success!");
-			ConnPostClient.postJson(path, JsonProcess.changeEntityTOJSON(log));
+		    WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+		} catch (Exception e) {
+          return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 创建关闭账号日志
+	 * @param accountNumber
+	 * @return
+	 */
+	private boolean closeAccountLog(String accountNumber) {
+		try {
+			SysTransactionLogEntity log = new SysTransactionLogEntity();
+		    log.setId(UUIDUtil.generateUUID());
+		    log.setUserid("000000");
+		    log.setUsername("测试账号");
+		    log.setOperationtype(SysConstant.OPERATION_DELETE);
+		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
+		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
+		    log.setOperationdate(sf.parse(sf.format(new Date())));
+		    log.setOperationdetail("close accountNumber:"+accountNumber+" success!");
+		    WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
 		} catch (Exception e) {
           return false;
 		}

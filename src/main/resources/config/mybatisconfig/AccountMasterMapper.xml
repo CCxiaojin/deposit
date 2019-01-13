@@ -13,9 +13,15 @@
     <result column="ChequeBookSize" property="chequebooksize" jdbcType="DECIMAL" />
   </resultMap>
   
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+  <select id="findAccountByParams" resultMap="BaseResultMap" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
     select * from t_account_master
     where 1=1
+    <if test="accountnumber != null and accountnumber !=''" >
+       and AccountNumber = #{accountnumber,jdbcType=VARCHAR}
+    </if>
+    <if test="accounttype != null and accounttype !=''" >
+       and AccountType = #{accounttype,jdbcType=VARCHAR}
+    </if>
   </select>
   
   <delete id="delete" parameterType="java.lang.String" >
@@ -114,6 +120,20 @@
       </if>
     </set>
     where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="closeAccount" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+    update t_account_master
+    <set >
+      <if test="accountstatus != null" >
+        AccountStatus = #{accountstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="lastupdateddate != null" >
+        LastUpdatedDate = #{lastupdateddate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where AccountNumber = #{accountnumber,jdbcType=VARCHAR}
+     and AccountType = #{accounttype,jdbcType=VARCHAR}
   </update>
   
 </mapper>

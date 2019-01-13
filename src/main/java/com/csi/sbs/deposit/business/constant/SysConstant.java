@@ -29,6 +29,17 @@ public class SysConstant {
 		   return map;
 	   }
 	   
+	   //账号状态
+	   public static final String ACCOUNT_STATE1 = "D";
+	   
+	   public static Map<String,Object> getAccountStateMap(){
+		   Map<String,Object> map = new HashMap<String,Object>();
+		   
+		   map.put(ACCOUNT_STATE1, "账号已关闭");
+		   
+		   return map;
+	   }
+	   
 	   //操作类型
 	   public static final String OPERATION_CREATE = "create";
 	   public static final String OPERATION_UPDATE = "update";
@@ -39,6 +50,9 @@ public class SysConstant {
 	   public static final String OPERATION_SUCCESS = "success";
 	   public static final String OPERATION_FAIL = "fail";
 
+	   
+	   //写日志服务地址
+	   public static final String WRITE_LOG_SERVICEPATH = "http://localhost:8083/sysadmin/log/writeTransactionLog";
 	   //返回内部服务接口地址 URL
        public static final String SERVICE_INTERNAL_URL = "http://localhost:8083/sysadmin/getServiceInternalURL";
        //本服务内网地址
