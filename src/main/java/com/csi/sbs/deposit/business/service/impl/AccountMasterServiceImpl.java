@@ -13,8 +13,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.csi.sbs.common.business.httpclient.ConnPostClient;
 import com.csi.sbs.common.business.json.JsonProcess;
 import com.csi.sbs.common.business.util.UUIDUtil;
+import com.csi.sbs.deposit.business.clientmodel.CurrencyModel;
 import com.csi.sbs.deposit.business.clientmodel.DepositModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.dao.AccountMasterDao;
@@ -48,12 +50,29 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		return accountMasterDao.closeAccount(ame);
 	}
 
-	@SuppressWarnings("null")
+	
 	@Override
 	@Transactional
 	public Map<String,Object> deposit(DepositModel depositModel) throws ParseException {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Map<String,Object> map = new HashMap<String,Object>();
+		//校验必填字段
+		if(!validateMandatoryField(depositModel)){
+			map.put("msg", "Required field incomplete");
+			map.put("code", "0");
+			
+			return map;
+		}
+		//校验是否支持输入的ccy
+		CurrencyModel currency = new CurrencyModel();
+		currency.setCcycode(depositModel.getDepositCCyCode());
+		String flag = ConnPostClient.postJson("http://localhost:8083/sysadmin/isSupportbyccy", JsonProcess.changeEntityTOJSON(currency));
+		if(flag.equals("false")){
+			map.put("msg", "Currency Not Found");
+			map.put("code", "1");
+			
+			return map;
+		}
 		//根据accountNumber 和 ccy 查询
 		AccountMasterEntity account = new AccountMasterEntity();
 		account.setAccountnumber(depositModel.getAccountNumber());
@@ -61,7 +80,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		
 		@SuppressWarnings("unchecked")
 		List<AccountMasterEntity> accountList = accountMasterDao.findAccountByParams(account);
-		if(accountList==null && accountList.size()==0){
+		if(accountList==null || accountList.size()==0){
 			map.put("msg", "Record Not Found");
 			map.put("code", "0");
 			
@@ -115,4 +134,17 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		return accountNumber;
 	}
 
+	
+	private boolean validateMandatoryField(DepositModel depositModel){
+		if(depositModel.getAccountNumber()==null || "".equals(depositModel.getAccountNumber())){
+			return false;
+		}
+		if(depositModel.getDepositAmount()==null || "".equals(depositModel.getDepositAmount()) || depositModel.getDepositAmount().equals("0")){
+			return false;
+		}
+		if(depositModel.getDepositCCyCode()==null || "".equals(depositModel.getDepositCCyCode())){
+			return false;
+		}
+		return true;
+	}
 }

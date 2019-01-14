@@ -367,8 +367,6 @@ public class CustomerMasterController {
 			throws JsonProcessingException {
 		Map<String,Object> map = null;
 		try {
-			//校验ccy 是否支持
-			//业务逻辑待定
 			map = accountMasterService.deposit(depositModel);
 		} catch (Exception e) {
 			map.put("msg", "Transaction Fail");
