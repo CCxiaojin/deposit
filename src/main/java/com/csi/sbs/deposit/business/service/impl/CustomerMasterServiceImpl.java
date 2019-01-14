@@ -35,14 +35,19 @@ public class CustomerMasterServiceImpl implements CustomerMasterService{
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public String createCustomer(CustomerAndAccountModel cam,boolean flag) {
+	public String[] createCustomer(CustomerAndAccountModel cam,boolean flag,CustomerMasterEntity recustomer) {
 		if(flag){
+			cam.getAccount().setCustomerprimarykeyid(recustomer.getId());
 			accountMasterDao.insert(cam.getAccount());
 		}else{
 			customerMasterDao.insert(cam.getCustomer());
+			cam.getAccount().setCustomerprimarykeyid(cam.getCustomer().getId());
 			accountMasterDao.insert(cam.getAccount());
 		}
-		return cam.getAccount().getAccountnumber();
+		String[] temp = new String[2];
+		temp[0] = cam.getAccount().getAccountnumber();
+		temp[1] = cam.getCustomer().getId();
+		return temp;
 	}
 
 	@Override

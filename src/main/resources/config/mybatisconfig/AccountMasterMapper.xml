@@ -11,6 +11,7 @@
     <result column="LastUpdatedDate" property="lastupdateddate" jdbcType="TIMESTAMP" />
     <result column="ChequeBookType" property="chequebooktype" jdbcType="VARCHAR" />
     <result column="ChequeBookSize" property="chequebooksize" jdbcType="DECIMAL" />
+    <result column="CustomerPrimaryKeyID" property="customerprimarykeyid" jdbcType="VARCHAR" />
   </resultMap>
   
   <select id="findAccountByParams" resultMap="BaseResultMap" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
@@ -59,6 +60,9 @@
       <if test="chequebooksize != null" >
         ChequeBookSize,
       </if>
+      <if test="customerprimarykeyid != null" >
+        CustomerPrimaryKeyID,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -87,6 +91,9 @@
       </if>
       <if test="chequebooksize != null" >
         #{chequebooksize,jdbcType=DECIMAL},
+      </if>
+      <if test="customerprimarykeyid != null" >
+        #{customerprimarykeyid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -117,6 +124,9 @@
       </if>
       <if test="chequebooksize != null" >
         ChequeBookSize = #{chequebooksize,jdbcType=DECIMAL},
+      </if>
+      <if test="customerprimarykeyid != null" >
+        CustomerPrimaryKeyID = #{customerprimarykeyid,jdbcType=VARCHAR},
       </if>
     </set>
     where ID = #{id,jdbcType=VARCHAR}

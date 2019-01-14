@@ -69,7 +69,7 @@ public class CustomerMasterModel {
     
     
     
-
+   
 	public String getId() {
 		return id;
 	}

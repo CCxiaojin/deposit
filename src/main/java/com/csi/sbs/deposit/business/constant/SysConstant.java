@@ -56,7 +56,7 @@ public class SysConstant {
 	   //返回内部服务接口地址 URL
        public static final String SERVICE_INTERNAL_URL = "http://localhost:8083/sysadmin/getServiceInternalURL";
        //本服务内网地址
-       public static final String LOCAL_SERVICE_URL = "http://localhost:8081/deposit";
+       public static final String LOCAL_SERVICE_URL = "http://localhost:8084/deposit";
        //本服务名称
        public static final String LOCAL_SERVICE_NAME = "deposit";
 }

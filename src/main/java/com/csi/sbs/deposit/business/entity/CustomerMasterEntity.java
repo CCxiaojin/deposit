@@ -57,6 +57,7 @@ public class CustomerMasterEntity {
     private Integer monthlysalary;
     
     
+   
 
 	public String getId() {
 		return id;

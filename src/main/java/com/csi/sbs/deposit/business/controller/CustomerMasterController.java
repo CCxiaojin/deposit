@@ -69,7 +69,7 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for create savingaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(required = true)
+	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
 	public String openingSavingAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -88,12 +88,12 @@ public class CustomerMasterController {
 			customerAndAccountModel.getAccount().setCurrencycode(
 					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE1);
-			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel,flag);
+			String[] temp = customerMasterService.createCustomer(customerAndAccountModel,flag,recustomer);
 			
 			//写入日志
-			createAccountLog(accountNumber);
+			createAccountLog(temp[0]);
 			map.put("msg", "创建成功");
-			map.put("accountNumber", accountNumber);
+			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
@@ -115,7 +115,7 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for create currentaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(required = true)
+	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
 	public String openingCurrentAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -134,11 +134,11 @@ public class CustomerMasterController {
 			customerAndAccountModel.getAccount().setCurrencycode(
 					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
-			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel,flag);
+			String[] temp = customerMasterService.createCustomer(customerAndAccountModel,flag,recustomer);
 			//写入日志
-			createAccountLog(accountNumber);
+			createAccountLog(temp[0]);
 			map.put("msg", "创建成功");
-			map.put("accountNumber", accountNumber);
+			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
@@ -160,7 +160,7 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for create feaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(required = true)
+	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
 	public String openingFEAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -178,11 +178,11 @@ public class CustomerMasterController {
 			}
 			customerAndAccountModel.getAccount().setBalance(new BigDecimal(0));
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE3);
-			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel,flag);
+			String[] temp = customerMasterService.createCustomer(customerAndAccountModel,flag,recustomer);
 			//写入日志
-			createAccountLog(accountNumber);
+			createAccountLog(temp[0]);
 			map.put("msg", "创建成功");
-			map.put("accountNumber", accountNumber);
+			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
@@ -204,7 +204,7 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for create tdaccount", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(required = true)
+	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
 	public String openingTDAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -221,11 +221,11 @@ public class CustomerMasterController {
 				flag = true;
 			}
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE4);
-			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel,flag);
+			String[] temp = customerMasterService.createCustomer(customerAndAccountModel,flag,recustomer);
 			//写入日志
-			createAccountLog(accountNumber);
+			createAccountLog(temp[0]);
 			map.put("msg", "创建成功");
-			map.put("accountNumber", accountNumber);
+			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
 		} catch (Exception e) {
 			map.put("msg", "创建失败");
@@ -407,6 +407,7 @@ public class CustomerMasterController {
 		cam.getAccount().setBalance(new BigDecimal(0));
 		cam.getAccount().setId(UUIDUtil.generateUUID());
 		cam.getAccount().setAccountnumber(clearcode + branchnumber + customerNumber);
+		//cam.getAccount().setCustomerprimarykeyid(customerprimarykeyid);
 
 		map.put("msg", "处理成功");
 		map.put("localCCy", localCCy);
@@ -424,8 +425,6 @@ public class CustomerMasterController {
 		try {
 			SysTransactionLogEntity log = new SysTransactionLogEntity();
 		    log.setId(UUIDUtil.generateUUID());
-		    log.setUserid("000000");
-		    log.setUsername("测试账号");
 		    log.setOperationtype(SysConstant.OPERATION_CREATE);
 		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
 		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
@@ -447,8 +446,6 @@ public class CustomerMasterController {
 		try {
 			SysTransactionLogEntity log = new SysTransactionLogEntity();
 		    log.setId(UUIDUtil.generateUUID());
-		    log.setUserid("000000");
-		    log.setUsername("测试账号");
 		    log.setOperationtype(SysConstant.OPERATION_DELETE);
 		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
 		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
@@ -468,8 +465,6 @@ public class CustomerMasterController {
 		try {
 			SysTransactionLogEntity log = new SysTransactionLogEntity();
 		    log.setId(UUIDUtil.generateUUID());
-		    log.setUserid("000000");
-		    log.setUsername("测试账号");
 		    log.setOperationtype(SysConstant.OPERATION_UPDATE);
 		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
 		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);

@@ -48,7 +48,7 @@
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
   
-  <insert id="insert" parameterType="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
+  <insert id="insert" keyProperty="id" parameterType="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
     insert into t_customer_master
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

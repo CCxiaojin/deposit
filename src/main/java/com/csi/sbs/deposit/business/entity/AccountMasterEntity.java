@@ -23,7 +23,17 @@ public class AccountMasterEntity {
 
     private Short chequebooksize;
     
+    private String customerprimarykeyid;
     
+    
+
+	public String getCustomerprimarykeyid() {
+		return customerprimarykeyid;
+	}
+
+	public void setCustomerprimarykeyid(String customerprimarykeyid) {
+		this.customerprimarykeyid = customerprimarykeyid;
+	}
 
 	public String getId() {
 		return id;
