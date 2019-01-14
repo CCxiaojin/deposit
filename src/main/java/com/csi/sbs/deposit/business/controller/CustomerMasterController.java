@@ -46,13 +46,13 @@ import com.csi.sbs.deposit.business.util.WriteLogUtil;
 @RequestMapping("/deposit/account")
 @Api(value = "Then controller is deposit account")
 public class CustomerMasterController {
-	
+
 	@Resource
 	private CustomerMasterService customerMasterService;
-	
+
 	@Resource
 	private AccountMasterService accountMasterService;
-	
+
 	private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	ObjectMapper objectMapper = new ObjectMapper();
@@ -70,28 +70,31 @@ public class CustomerMasterController {
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
 	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
-	public String openingSavingAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
+	public String openingSavingAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel)
+			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
+			if (!JsonProcess
+					.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
 					.equals("1")) {
 				return commonBusinessProcess(customerAndAccountModel);
 			}
-			//校验客户是否存在
+			// 校验客户是否存在
 			CustomerMasterEntity cme = new CustomerMasterEntity();
 			cme.setCustomerid(customerAndAccountModel.getCustomer().getCustomerid());
 			CustomerMasterEntity recustomer = customerMasterService.findCustomerByCustomerID(cme);
 			boolean flag = false;
-			if(recustomer!=null){
+			if (recustomer != null) {
 				flag = true;
 			}
-			customerAndAccountModel.getAccount().setCurrencycode(
-					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
+			customerAndAccountModel.getAccount().setCurrencycode(JsonProcess.returnValue(
+					JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE1);
-			String[] temp = customerMasterService.createCustomer(customerAndAccountModel,flag,recustomer);
-			
-			//写入日志
+			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
+
+			// 写入日志
 			createAccountLog(temp[0]);
+			availableNumberIncrease();
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
@@ -116,27 +119,30 @@ public class CustomerMasterController {
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
 	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
-	public String openingCurrentAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
+	public String openingCurrentAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel)
+			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
+			if (!JsonProcess
+					.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
 					.equals("1")) {
 				return commonBusinessProcess(customerAndAccountModel);
 			}
-			//校验客户是否存在
+			// 校验客户是否存在
 			CustomerMasterEntity cme = new CustomerMasterEntity();
 			cme.setCustomerid(customerAndAccountModel.getCustomer().getCustomerid());
 			CustomerMasterEntity recustomer = customerMasterService.findCustomerByCustomerID(cme);
 			boolean flag = false;
-			if(recustomer!=null){
+			if (recustomer != null) {
 				flag = true;
 			}
-			customerAndAccountModel.getAccount().setCurrencycode(
-					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
+			customerAndAccountModel.getAccount().setCurrencycode(JsonProcess.returnValue(
+					JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
-			String[] temp = customerMasterService.createCustomer(customerAndAccountModel,flag,recustomer);
-			//写入日志
+			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
+			// 写入日志
 			createAccountLog(temp[0]);
+			availableNumberIncrease();
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
@@ -161,26 +167,29 @@ public class CustomerMasterController {
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
 	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
-	public String openingFEAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
+	public String openingFEAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel)
+			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
+			if (!JsonProcess
+					.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
 					.equals("1")) {
 				return commonBusinessProcess(customerAndAccountModel);
 			}
-			//校验客户是否存在
+			// 校验客户是否存在
 			CustomerMasterEntity cme = new CustomerMasterEntity();
 			cme.setCustomerid(customerAndAccountModel.getCustomer().getCustomerid());
 			CustomerMasterEntity recustomer = customerMasterService.findCustomerByCustomerID(cme);
 			boolean flag = false;
-			if(recustomer!=null){
+			if (recustomer != null) {
 				flag = true;
 			}
 			customerAndAccountModel.getAccount().setBalance(new BigDecimal(0));
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE3);
-			String[] temp = customerMasterService.createCustomer(customerAndAccountModel,flag,recustomer);
-			//写入日志
+			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
+			// 写入日志
 			createAccountLog(temp[0]);
+			availableNumberIncrease();
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
@@ -205,25 +214,28 @@ public class CustomerMasterController {
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
 	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
-	public String openingTDAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
+	public String openingTDAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel)
+			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
+			if (!JsonProcess
+					.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
 					.equals("1")) {
 				return commonBusinessProcess(customerAndAccountModel);
 			}
-			//校验客户是否存在
+			// 校验客户是否存在
 			CustomerMasterEntity cme = new CustomerMasterEntity();
 			cme.setCustomerid(customerAndAccountModel.getCustomer().getCustomerid());
 			CustomerMasterEntity recustomer = customerMasterService.findCustomerByCustomerID(cme);
 			boolean flag = false;
-			if(recustomer!=null){
+			if (recustomer != null) {
 				flag = true;
 			}
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE4);
-			String[] temp = customerMasterService.createCustomer(customerAndAccountModel,flag,recustomer);
-			//写入日志
+			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
+			// 写入日志
 			createAccountLog(temp[0]);
+			availableNumberIncrease();
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
@@ -234,9 +246,10 @@ public class CustomerMasterController {
 
 		return objectMapper.writeValueAsString(map);
 	}
-	
+
 	/**
 	 * 账号关闭
+	 * 
 	 * @param cam
 	 * @return
 	 * @throws JsonProcessingException
@@ -245,36 +258,36 @@ public class CustomerMasterController {
 	@ResponseBody
 	@ApiOperation(value = "This api is for close account", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "close Fail!"),
-		@ApiResponse(code = 1, message = "close Success!") })
-    @ApiImplicitParam(required = true)
+			@ApiResponse(code = 1, message = "close Success!") })
+	@ApiImplicitParam(required = true)
 	public String accountClosure(@RequestBody CloseAccountModel closeAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			AccountMasterEntity ame = new AccountMasterEntity();
 			ame.setAccountnumber(closeAccountModel.getAccountNumber());
 			ame.setAccounttype(closeAccountModel.getAccountType());
-			//根据accountNumber 和 accountType查询账号
+			// 根据accountNumber 和 accountType查询账号
 			List<AccountMasterEntity> accountList = accountMasterService.findAccountByParams(ame);
-			if(accountList==null || accountList.size()==0){
+			if (accountList == null || accountList.size() == 0) {
 				map.put("msg", "Record Not Found");
 				map.put("code", "0");
 				return objectMapper.writeValueAsString(map);
 			}
-			//校验账户余额是否大于0
+			// 校验账户余额是否大于0
 			int r = accountList.get(0).getBalance().compareTo(BigDecimal.ZERO);
-			if(r!=0){
+			if (r != 0) {
 				map.put("msg", "Account Balance Not Zero");
 				map.put("code", "0");
 				return objectMapper.writeValueAsString(map);
 			}
-			
+
 			ame.setAccountstatus(SysConstant.ACCOUNT_STATE1);
 			ame.setLastupdateddate(sf.parse(sf.format(new Date())));
-			if(accountMasterService.closeAccount(ame)>0){
+			if (accountMasterService.closeAccount(ame) > 0) {
 				map.put("msg", "Account Deleted Success");
 				map.put("code", "1");
 				closeAccountLog(ame.getAccountnumber());
-			}else{
+			} else {
 				map.put("msg", "Account Deleted Fail");
 				map.put("code", "0");
 			}
@@ -286,9 +299,10 @@ public class CustomerMasterController {
 
 		return objectMapper.writeValueAsString(map);
 	}
-	
+
 	/**
 	 * 账号维护
+	 * 
 	 * @param cam
 	 * @return
 	 * @throws JsonProcessingException
@@ -297,16 +311,17 @@ public class CustomerMasterController {
 	@ResponseBody
 	@ApiOperation(value = "This api is for update customer contact Information", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "update Fail!"),
-		@ApiResponse(code = 1, message = "update Success!") })
-    @ApiImplicitParam(required = true)
-	public String updateCustContactInfo(@RequestBody CustomerMaintenanceModel customerMaintenanceModel) throws JsonProcessingException {
+			@ApiResponse(code = 1, message = "update Success!") })
+	@ApiImplicitParam(required = true)
+	public String updateCustContactInfo(@RequestBody CustomerMaintenanceModel customerMaintenanceModel)
+			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			AccountMasterEntity ame = new AccountMasterEntity();
 			ame.setAccountnumber(customerMaintenanceModel.getAccountNumber());
-			//根据accountNumber查询账号
+			// 根据accountNumber查询账号
 			List<AccountMasterEntity> accountList = accountMasterService.findAccountByParams(ame);
-			if(accountList==null || accountList.size()==0){
+			if (accountList == null || accountList.size() == 0) {
 				map.put("msg", "Record Not Found");
 				map.put("code", "0");
 				return objectMapper.writeValueAsString(map);
@@ -315,12 +330,13 @@ public class CustomerMasterController {
 			customer.setMailingaddress(customerMaintenanceModel.getMailingAddress());
 			customer.setMobilephonenumber(customerMaintenanceModel.getMobilePhoneNumber());
 			customer.setCustomerid(customerMaintenanceModel.getCustomerID());
-			if(customerMasterService.contactInformationUpdate(customer)>0){
-				map.put("msg", customerMaintenanceModel.getAccountNumber()+"-Customer Contact Information already Record Changed");
+			if (customerMasterService.contactInformationUpdate(customer) > 0) {
+				map.put("msg", customerMaintenanceModel.getAccountNumber()
+						+ "-Customer Contact Information already Record Changed");
 				map.put("code", "1");
 				updateAccountLog(customerMaintenanceModel.getAccountNumber());
 				return objectMapper.writeValueAsString(map);
-			}else{
+			} else {
 				map.put("msg", "Record Change Fail");
 				map.put("code", "0");
 				return objectMapper.writeValueAsString(map);
@@ -407,7 +423,7 @@ public class CustomerMasterController {
 		cam.getAccount().setBalance(new BigDecimal(0));
 		cam.getAccount().setId(UUIDUtil.generateUUID());
 		cam.getAccount().setAccountnumber(clearcode + branchnumber + customerNumber);
-		//cam.getAccount().setCustomerprimarykeyid(customerprimarykeyid);
+		// cam.getAccount().setCustomerprimarykeyid(customerprimarykeyid);
 
 		map.put("msg", "处理成功");
 		map.put("localCCy", localCCy);
@@ -418,42 +434,44 @@ public class CustomerMasterController {
 
 	/**
 	 * 创建账号日志
+	 * 
 	 * @param accountNumber
 	 * @return
 	 */
 	private boolean createAccountLog(String accountNumber) {
 		try {
 			SysTransactionLogEntity log = new SysTransactionLogEntity();
-		    log.setId(UUIDUtil.generateUUID());
-		    log.setOperationtype(SysConstant.OPERATION_CREATE);
-		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
-		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
-		    log.setOperationdate(sf.parse(sf.format(new Date())));
-		    log.setOperationdetail("create accountNumber:"+accountNumber+" success!");
-		    WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+			log.setId(UUIDUtil.generateUUID());
+			log.setOperationtype(SysConstant.OPERATION_CREATE);
+			log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
+			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
+			log.setOperationdate(sf.parse(sf.format(new Date())));
+			log.setOperationdetail("create accountNumber:" + accountNumber + " success!");
+			WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
 		} catch (Exception e) {
-          return false;
+			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 创建关闭账号日志
+	 * 
 	 * @param accountNumber
 	 * @return
 	 */
 	private boolean closeAccountLog(String accountNumber) {
 		try {
 			SysTransactionLogEntity log = new SysTransactionLogEntity();
-		    log.setId(UUIDUtil.generateUUID());
-		    log.setOperationtype(SysConstant.OPERATION_DELETE);
-		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
-		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
-		    log.setOperationdate(sf.parse(sf.format(new Date())));
-		    log.setOperationdetail("close accountNumber:"+accountNumber+" success!");
-		    WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+			log.setId(UUIDUtil.generateUUID());
+			log.setOperationtype(SysConstant.OPERATION_DELETE);
+			log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
+			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
+			log.setOperationdate(sf.parse(sf.format(new Date())));
+			log.setOperationdetail("close accountNumber:" + accountNumber + " success!");
+			WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
 		} catch (Exception e) {
-          return false;
+			return false;
 		}
 		return true;
 	}
@@ -461,21 +479,22 @@ public class CustomerMasterController {
 	/**
 	 * 账号修改
 	 */
-	private boolean updateAccountLog(String accountNumber){
+	private boolean updateAccountLog(String accountNumber) {
 		try {
 			SysTransactionLogEntity log = new SysTransactionLogEntity();
-		    log.setId(UUIDUtil.generateUUID());
-		    log.setOperationtype(SysConstant.OPERATION_UPDATE);
-		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
-		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
-		    log.setOperationdate(sf.parse(sf.format(new Date())));
-		    log.setOperationdetail("update accountNumber:"+accountNumber+" contact information success!");
-		    WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+			log.setId(UUIDUtil.generateUUID());
+			log.setOperationtype(SysConstant.OPERATION_UPDATE);
+			log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
+			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
+			log.setOperationdate(sf.parse(sf.format(new Date())));
+			log.setOperationdetail("update accountNumber:" + accountNumber + " contact information success!");
+			WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
 		} catch (Exception e) {
-          return false;
+			return false;
 		}
 		return true;
 	}
+
 	/**
 	 * 字段校验
 	 */
@@ -515,4 +534,50 @@ public class CustomerMasterController {
 
 		return true;
 	}
+
+	/**
+	 * 可用Number加一
+	 */
+	private void availableNumberIncrease() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		String currentNumber = ConnGetClient.get("http://localhost:8083/sysadmin/generate/getNextAvailableNumber");
+		if (currentNumber == null) {
+			map.put("msg", "调用系统参数失败");
+			map.put("code", "0");
+		}
+		int nextAvailableCustomerNumber = 0;
+		nextAvailableCustomerNumber = Integer.parseInt(JsonProcess.returnValue(JsonProcess.changeToJSONObject(currentNumber), "nextAvailableNumber"));
+		// 可用number加1
+		nextAvailableCustomerNumber = nextAvailableCustomerNumber + 1;
+		String availableNumber = String.valueOf(nextAvailableCustomerNumber);
+		int availableNumberLength = availableNumber.length();
+		String appendSave = "";
+		// 可用number长度判断
+		switch (availableNumberLength) {
+		case 1:
+			appendSave = "0000" + nextAvailableCustomerNumber;
+			break;
+		case 2:
+			appendSave = "000" + nextAvailableCustomerNumber;
+			break;
+		case 3:
+			appendSave = "00" + nextAvailableCustomerNumber;
+			break;
+		case 4:
+			appendSave = "0" + nextAvailableCustomerNumber;
+			break;
+		case 5:
+			appendSave = nextAvailableCustomerNumber + "";
+			break;
+		}
+		
+		
+		String params2 = "{\"value\":\""+appendSave+"\"}";
+		String result2 = ConnPostClient.postJson("http://localhost:8083/sysadmin/generate/saveNextAvailableNumber", params2);
+		if (result2 == null) {
+			map.put("msg", "生成下一个可用number失败");
+			map.put("code", "0");
+		}
+	}
+
 }
