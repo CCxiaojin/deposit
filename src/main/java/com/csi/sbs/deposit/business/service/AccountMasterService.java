@@ -13,5 +13,7 @@ public interface AccountMasterService {
 	   public List<AccountMasterEntity> findAccountByParams(AccountMasterEntity ame);
 	   
 	   public int closeAccount(AccountMasterEntity ame);
+	   
+	   
 
 }

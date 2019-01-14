@@ -286,4 +286,18 @@
     where ID = #{id,jdbcType=VARCHAR}
   </update>
   
+  
+  <update id="contactInformationUpdate" parameterType="com.csi.sbs.deposit.business.entity.CustomerMasterEntity" >
+    update t_customer_master
+    <set >
+      <if test="mobilephonenumber != null" >
+        MobilePhoneNumber = #{mobilephonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="mailingaddress != null" >
+        MailingAddress = #{mailingaddress,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CustomerID = #{customerid,jdbcType=VARCHAR}
+  </update>
+  
 </mapper>

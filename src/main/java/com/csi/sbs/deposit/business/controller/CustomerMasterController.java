@@ -32,8 +32,10 @@ import com.csi.sbs.common.business.json.JsonProcess;
 import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.CloseAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
+import com.csi.sbs.deposit.business.clientmodel.CustomerMaintenanceModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
+import com.csi.sbs.deposit.business.entity.CustomerMasterEntity;
 import com.csi.sbs.deposit.business.entity.SysTransactionLogEntity;
 import com.csi.sbs.deposit.business.service.AccountMasterService;
 import com.csi.sbs.deposit.business.service.CustomerMasterService;
@@ -252,6 +254,52 @@ public class CustomerMasterController {
 
 		return objectMapper.writeValueAsString(map);
 	}
+	
+	/**
+	 * 账号维护
+	 * @param cam
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value = "/updateCustContactInfo", method = RequestMethod.POST)
+	@ResponseBody
+	@ApiOperation(value = "This api is for update customer contact Information", notes = "version 0.0.1")
+	@ApiResponses({ @ApiResponse(code = 0, message = "update Fail!"),
+		@ApiResponse(code = 1, message = "update Success!") })
+    @ApiImplicitParam(required = true)
+	public String updateCustContactInfo(@RequestBody CustomerMaintenanceModel customerMaintenanceModel) throws JsonProcessingException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			AccountMasterEntity ame = new AccountMasterEntity();
+			ame.setAccountnumber(customerMaintenanceModel.getAccountNumber());
+			//根据accountNumber查询账号
+			List<AccountMasterEntity> accountList = accountMasterService.findAccountByParams(ame);
+			if(accountList==null || accountList.size()==0){
+				map.put("msg", "Record Not Found");
+				map.put("code", "0");
+				return objectMapper.writeValueAsString(map);
+			}
+			CustomerMasterEntity customer = new CustomerMasterEntity();
+			customer.setMailingaddress(customerMaintenanceModel.getMailingAddress());
+			customer.setMobilephonenumber(customerMaintenanceModel.getMobilePhoneNumber());
+			customer.setCustomerid(customerMaintenanceModel.getCustomerID());
+			if(customerMasterService.contactInformationUpdate(customer)>0){
+				map.put("msg", customerMaintenanceModel.getAccountNumber()+"-Customer Contact Information already Record Changed");
+				map.put("code", "1");
+				updateAccountLog(customerMaintenanceModel.getAccountNumber());
+				return objectMapper.writeValueAsString(map);
+			}else{
+				map.put("msg", "Record Change Fail");
+				map.put("code", "0");
+				return objectMapper.writeValueAsString(map);
+			}
+		} catch (Exception e) {
+			map.put("msg", "Record Change Fail");
+			map.put("code", "0");
+		}
+
+		return objectMapper.writeValueAsString(map);
+	}
 
 	/**
 	 * 创建账号公共业务处理
@@ -381,6 +429,26 @@ public class CustomerMasterController {
 		return true;
 	}
 
+	/**
+	 * 账号修改
+	 */
+	private boolean updateAccountLog(String accountNumber){
+		try {
+			SysTransactionLogEntity log = new SysTransactionLogEntity();
+		    log.setId(UUIDUtil.generateUUID());
+		    log.setUserid("000000");
+		    log.setUsername("测试账号");
+		    log.setOperationtype(SysConstant.OPERATION_UPDATE);
+		    log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
+		    log.setOperationstate(SysConstant.OPERATION_SUCCESS);
+		    log.setOperationdate(sf.parse(sf.format(new Date())));
+		    log.setOperationdetail("update accountNumber:"+accountNumber+" contact information success!");
+		    WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+		} catch (Exception e) {
+          return false;
+		}
+		return true;
+	}
 	/**
 	 * 字段校验
 	 */

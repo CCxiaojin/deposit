@@ -11,5 +11,7 @@ public interface CustomerMasterService {
 	   public List<CustomerMasterEntity> queryAll();
 	   
 	   public String createCustomer(CustomerAndAccountModel cam);
+	   
+	   public int contactInformationUpdate(CustomerMasterEntity cme);
 
 }

@@ -42,4 +42,9 @@ public class CustomerMasterServiceImpl implements CustomerMasterService{
 		return cam.getAccount().getAccountnumber();
 	}
 
+	@Override
+	public int contactInformationUpdate(CustomerMasterEntity cme) {
+		return customerMasterDao.contactInformationUpdate(cme);
+	}
+
 }

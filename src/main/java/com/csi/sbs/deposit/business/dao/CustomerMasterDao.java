@@ -13,5 +13,7 @@ public interface CustomerMasterDao<T> extends BaseDao<T> {
 	
 	
 	public List<CustomerMasterEntity> queryAll();
+	
+	public int contactInformationUpdate(CustomerMasterEntity cme);
 
 }
