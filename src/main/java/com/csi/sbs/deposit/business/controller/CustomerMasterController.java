@@ -33,6 +33,7 @@ import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.CloseAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerMaintenanceModel;
+import com.csi.sbs.deposit.business.clientmodel.DepositModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
 import com.csi.sbs.deposit.business.entity.CustomerMasterEntity;
@@ -259,7 +260,7 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for close account", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "close Fail!"),
 			@ApiResponse(code = 1, message = "close Success!") })
-	@ApiImplicitParam(required = true)
+	@ApiImplicitParam(paramType = "body", name = "closeAccountModel", required = true, value = "closeAccountModel")
 	public String accountClosure(@RequestBody CloseAccountModel closeAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -312,7 +313,7 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for update customer contact Information", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "update Fail!"),
 			@ApiResponse(code = 1, message = "update Success!") })
-	@ApiImplicitParam(required = true)
+	@ApiImplicitParam(paramType = "body", name = "customerMaintenanceModel", required = true, value = "customerMaintenanceModel")
 	public String updateCustContactInfo(@RequestBody CustomerMaintenanceModel customerMaintenanceModel)
 			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -346,6 +347,33 @@ public class CustomerMasterController {
 			map.put("code", "0");
 		}
 
+		return objectMapper.writeValueAsString(map);
+	}
+	
+	/**
+	 * 存款
+	 * 
+	 * @param cam
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value = "/deposit", method = RequestMethod.POST)
+	@ResponseBody
+	@ApiOperation(value = "This api is for deposit", notes = "version 0.0.1")
+	@ApiResponses({ @ApiResponse(code = 0, message = "deposit Fail!"),
+			@ApiResponse(code = 1, message = "deposit Success!") })
+	@ApiImplicitParam(paramType = "body", name = "depositModel", required = true, value = "depositModel")
+	public String deposit(@RequestBody DepositModel depositModel)
+			throws JsonProcessingException {
+		Map<String,Object> map = null;
+		try {
+			//校验ccy 是否支持
+			//业务逻辑待定
+			map = accountMasterService.deposit(depositModel);
+		} catch (Exception e) {
+			map.put("msg", "Transaction Fail");
+			map.put("code", "0");
+		}
 		return objectMapper.writeValueAsString(map);
 	}
 

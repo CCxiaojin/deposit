@@ -23,6 +23,9 @@
     <if test="accounttype != null and accounttype !=''" >
        and AccountType = #{accounttype,jdbcType=VARCHAR}
     </if>
+    <if test="currencycode != null and currencycode !=''" >
+       and CurrencyCode = #{currencycode,jdbcType=VARCHAR}
+    </if>
   </select>
   
   <delete id="delete" parameterType="java.lang.String" >
@@ -144,6 +147,19 @@
     </set>
     where AccountNumber = #{accountnumber,jdbcType=VARCHAR}
      and AccountType = #{accounttype,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="deposit" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+    update t_account_master
+    <set >
+      <if test="balance != null" >
+        Balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="lastupdateddate != null" >
+        LastUpdatedDate = #{lastupdateddate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where AccountNumber = #{accountnumber,jdbcType=VARCHAR}
   </update>
   
 </mapper>
