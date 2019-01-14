@@ -77,10 +77,18 @@ public class CustomerMasterController {
 					.equals("1")) {
 				return commonBusinessProcess(customerAndAccountModel);
 			}
+			//校验客户是否存在
+			CustomerMasterEntity cme = new CustomerMasterEntity();
+			cme.setCustomerid(customerAndAccountModel.getCustomer().getCustomerid());
+			CustomerMasterEntity recustomer = customerMasterService.findCustomerByCustomerID(cme);
+			boolean flag = false;
+			if(recustomer!=null){
+				flag = true;
+			}
 			customerAndAccountModel.getAccount().setCurrencycode(
 					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE1);
-			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel);
+			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel,flag);
 			
 			//写入日志
 			createAccountLog(accountNumber);
@@ -108,17 +116,25 @@ public class CustomerMasterController {
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
 	@ApiImplicitParam(required = true)
-	public String openingCurrentAccount(@RequestBody CustomerAndAccountModel CustomerAndAccountModel) throws JsonProcessingException {
+	public String openingCurrentAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(CustomerAndAccountModel)), "code")
+			if (!JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "code")
 					.equals("1")) {
-				return commonBusinessProcess(CustomerAndAccountModel);
+				return commonBusinessProcess(customerAndAccountModel);
 			}
-			CustomerAndAccountModel.getAccount().setCurrencycode(
-					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(CustomerAndAccountModel)), "localCCy"));
-			CustomerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
-			String accountNumber = customerMasterService.createCustomer(CustomerAndAccountModel);
+			//校验客户是否存在
+			CustomerMasterEntity cme = new CustomerMasterEntity();
+			cme.setCustomerid(customerAndAccountModel.getCustomer().getCustomerid());
+			CustomerMasterEntity recustomer = customerMasterService.findCustomerByCustomerID(cme);
+			boolean flag = false;
+			if(recustomer!=null){
+				flag = true;
+			}
+			customerAndAccountModel.getAccount().setCurrencycode(
+					JsonProcess.returnValue(JsonProcess.changeToJSONObject(commonBusinessProcess(customerAndAccountModel)), "localCCy"));
+			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
+			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel,flag);
 			//写入日志
 			createAccountLog(accountNumber);
 			map.put("msg", "创建成功");
@@ -152,9 +168,17 @@ public class CustomerMasterController {
 					.equals("1")) {
 				return commonBusinessProcess(customerAndAccountModel);
 			}
+			//校验客户是否存在
+			CustomerMasterEntity cme = new CustomerMasterEntity();
+			cme.setCustomerid(customerAndAccountModel.getCustomer().getCustomerid());
+			CustomerMasterEntity recustomer = customerMasterService.findCustomerByCustomerID(cme);
+			boolean flag = false;
+			if(recustomer!=null){
+				flag = true;
+			}
 			customerAndAccountModel.getAccount().setBalance(new BigDecimal(0));
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE3);
-			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel);
+			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel,flag);
 			//写入日志
 			createAccountLog(accountNumber);
 			map.put("msg", "创建成功");
@@ -188,8 +212,16 @@ public class CustomerMasterController {
 					.equals("1")) {
 				return commonBusinessProcess(customerAndAccountModel);
 			}
+			//校验客户是否存在
+			CustomerMasterEntity cme = new CustomerMasterEntity();
+			cme.setCustomerid(customerAndAccountModel.getCustomer().getCustomerid());
+			CustomerMasterEntity recustomer = customerMasterService.findCustomerByCustomerID(cme);
+			boolean flag = false;
+			if(recustomer!=null){
+				flag = true;
+			}
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE4);
-			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel);
+			String accountNumber = customerMasterService.createCustomer(customerAndAccountModel,flag);
 			//写入日志
 			createAccountLog(accountNumber);
 			map.put("msg", "创建成功");

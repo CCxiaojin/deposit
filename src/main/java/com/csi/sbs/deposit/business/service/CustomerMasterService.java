@@ -10,8 +10,10 @@ public interface CustomerMasterService {
 	
 	   public List<CustomerMasterEntity> queryAll();
 	   
-	   public String createCustomer(CustomerAndAccountModel cam);
+	   public String createCustomer(CustomerAndAccountModel cam,boolean flag);
 	   
 	   public int contactInformationUpdate(CustomerMasterEntity cme);
+	   
+	   public CustomerMasterEntity findCustomerByCustomerID(CustomerMasterEntity cme);
 
 }
