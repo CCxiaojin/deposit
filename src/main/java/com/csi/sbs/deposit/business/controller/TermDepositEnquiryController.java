@@ -50,6 +50,7 @@ public class TermDepositEnquiryController {
 	     	jsonParam.append("\"operationstate\":\"com\",");
 	     	jsonParam.append("\"operationdate\":\"2015-7-1\",");
 	     	jsonParam.append("\"operationdetail\":\"description\"}");
+	     	
 			@SuppressWarnings("unused")
 			String result = ConnPostClient.postJson(path,jsonParam.toString());
 			map.put("msg", "写入日志成功");
