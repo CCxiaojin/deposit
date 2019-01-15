@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.csi.sbs.deposit.business.service.TermDepositEnquiryService;
 import com.csi.sbs.common.business.httpclient.ConnPostClient;
+import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.TermDepositEnquiryModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,11 +40,18 @@ public class TermDepositEnquiryController {
 		if(count>0){
 			map.put("msg", "查找成功");
      	   	map.put("code", "1");
-			String param="{\"ID\":"+cam.getId()+";"
-					+ "\"UserID\":"+cam.getAccountnumber()+";"
-					+"}";
+     	   	String path = "http://localhost:8083/sysadmin/log/writeTransactionLog";
+    	    StringBuilder jsonParam = new StringBuilder();	
+    	    jsonParam.append("{\"id\":\""+cam.getId()+"\",");
+    	    jsonParam.append("\"userid\":\"1151651\",");
+    	    jsonParam.append("\"username\":\"liyi\",");
+    	    jsonParam.append("\"operationtype\":\"C\",");
+	     	jsonParam.append("\"sourceservices\":\"gdfgfg\",");
+	     	jsonParam.append("\"operationstate\":\"com\",");
+	     	jsonParam.append("\"operationdate\":\"2015-7-1\",");
+	     	jsonParam.append("\"operationdetail\":\"description\"}");
 			@SuppressWarnings("unused")
-			String result1 = ConnPostClient.postJson("http://localhost:8083/deposit/",param);
+			String result = ConnPostClient.postJson(path,jsonParam.toString());
 			map.put("msg", "写入日志成功");
      	   	map.put("code", "1");
      	   return objectMapper.writeValueAsString(map);
