@@ -12,9 +12,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
-import com.csi.sbs.common.business.httpclient.ConnPostClient;
-import com.csi.sbs.common.business.json.JsonProcess;
 import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.CurrencyModel;
 import com.csi.sbs.deposit.business.clientmodel.DepositModel;
@@ -23,7 +22,6 @@ import com.csi.sbs.deposit.business.dao.AccountMasterDao;
 import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
 import com.csi.sbs.deposit.business.entity.SysTransactionLogEntity;
 import com.csi.sbs.deposit.business.service.AccountMasterService;
-import com.csi.sbs.deposit.business.util.WriteLogUtil;
 
 @Service("AccountMasterService")
 public class AccountMasterServiceImpl implements AccountMasterService{
@@ -53,7 +51,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 	
 	@Override
 	@Transactional
-	public Map<String,Object> deposit(DepositModel depositModel) throws ParseException {
+	public Map<String,Object> deposit(DepositModel depositModel,RestTemplate restTemplate) throws ParseException {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Map<String,Object> map = new HashMap<String,Object>();
 		//校验必填字段
@@ -66,7 +64,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		//校验是否支持输入的ccy
 		CurrencyModel currency = new CurrencyModel();
 		currency.setCcycode(depositModel.getDepositCCyCode());
-		String flag = ConnPostClient.postJson("http://localhost:8083/sysadmin/isSupportbyccy", JsonProcess.changeEntityTOJSON(currency));
+		String flag = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", currency,String.class);
 		if(flag.equals("false")){
 			map.put("msg", "Currency Not Found");
 			map.put("code", "1");
@@ -107,7 +105,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		//存款
 		accountMasterDao.deposit(account);
 		//写入日志
-		depositLog(depositModel.getAccountNumber());
+		depositLog(depositModel.getAccountNumber(),restTemplate);
 		
 		map.put("msg", "Transaction Accepted:" + depositModel.getAccountNumber());
 		map.put("code", "1");
@@ -121,7 +119,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 	 * @return
 	 * @throws ParseException 
 	 */
-	private String depositLog(String accountNumber) throws ParseException {
+	private String depositLog(String accountNumber,RestTemplate restTemplate) throws ParseException {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SysTransactionLogEntity log = new SysTransactionLogEntity();
 		log.setId(UUIDUtil.generateUUID());
@@ -130,7 +128,8 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		log.setOperationstate(SysConstant.OPERATION_SUCCESS);
 		log.setOperationdate(sf.parse(sf.format(new Date())));
 		log.setOperationdetail("Transaction Accepted:" + accountNumber);
-		WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+		@SuppressWarnings("unused")
+		String result = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", log,String.class);
 		return accountNumber;
 	}
 

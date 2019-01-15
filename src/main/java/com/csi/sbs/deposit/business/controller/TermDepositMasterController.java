@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.csi.sbs.common.business.httpclient.ConnPostClient;
 import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.TermDepositMasterModel;
 import com.csi.sbs.deposit.business.service.TermDepositMasterService;
@@ -43,19 +42,19 @@ public class TermDepositMasterController {
 	     	   	}     
 	     	    tdmService.termDepositApplication(tdm);
 	     	       	    
-	     	    //插入日志
-	     	    String path = "http://localhost:8083/sysadmin/log/writeTransactionLog";
-	     	    StringBuilder jsonParam = new StringBuilder();	
-	     	    jsonParam.append("{\"id\":\""+UUIDUtil.generateUUID()+"\",");
-	     	    jsonParam.append("\"userid\":\"1151651\",");
-	     	    jsonParam.append("\"username\":\"liyi\",");
-	     	    jsonParam.append("\"operationtype\":\"C\",");
-		     	jsonParam.append("\"sourceservices\":\"gdfgfg\",");
-		     	jsonParam.append("\"operationstate\":\"com\",");
-		     	jsonParam.append("\"operationdate\":\"2015-7-4\",");
-		     	jsonParam.append("\"operationdetail\":\"description\"}");
-		     		     	 
-	     	    ConnPostClient.postJson(path,jsonParam.toString());
+//	     	    //插入日志
+//	     	    String path = "http://localhost:8083/sysadmin/log/writeTransactionLog";
+//	     	    StringBuilder jsonParam = new StringBuilder();	
+//	     	    jsonParam.append("{\"id\":\""+UUIDUtil.generateUUID()+"\",");
+//	     	    jsonParam.append("\"userid\":\"1151651\",");
+//	     	    jsonParam.append("\"username\":\"liyi\",");
+//	     	    jsonParam.append("\"operationtype\":\"C\",");
+//		     	jsonParam.append("\"sourceservices\":\"gdfgfg\",");
+//		     	jsonParam.append("\"operationstate\":\"com\",");
+//		     	jsonParam.append("\"operationdate\":\"2015-7-4\",");
+//		     	jsonParam.append("\"operationdetail\":\"description\"}");
+//		     		     	 
+//	     	    ConnPostClient.postJson(path,jsonParam.toString());
 	     	    
 	            map.put("msg", "创建成功");
 	            map.put("code", "1");

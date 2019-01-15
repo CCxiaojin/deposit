@@ -54,9 +54,9 @@ public class SysConstant {
 
 	   
 	   //写日志服务地址
-	   public static final String WRITE_LOG_SERVICEPATH = "http://localhost:8083/sysadmin/log/writeTransactionLog";
+	   public static final String WRITE_LOG_SERVICEPATH = "http://SYSADMIN/sysadmin/log/writeTransactionLog";
 	   //返回内部服务接口地址 URL
-       public static final String SERVICE_INTERNAL_URL = "http://localhost:8083/sysadmin/getServiceInternalURL";
+       public static final String SERVICE_INTERNAL_URL = "/sysadmin/getServiceInternalURL";
        //本服务内网地址
        public static final String LOCAL_SERVICE_URL = "http://localhost:8084/deposit";
        //本服务名称
