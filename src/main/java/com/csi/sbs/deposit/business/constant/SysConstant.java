@@ -31,11 +31,13 @@ public class SysConstant {
 	   
 	   //账号状态
 	   public static final String ACCOUNT_STATE1 = "D";
+	   public static final String ACCOUNT_STATE2 = "A";
 	   
 	   public static Map<String,Object> getAccountStateMap(){
 		   Map<String,Object> map = new HashMap<String,Object>();
 		   
 		   map.put(ACCOUNT_STATE1, "账号已关闭");
+		   map.put(ACCOUNT_STATE2, "账号正常");
 		   
 		   return map;
 	   }
