@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csi.sbs.deposit.business.dao.TermDepositEnquiryDao" >
+  <resultMap id="BaseResultMap" type="com.csi.sbs.deposit.business.entity.TermDepositEnquiryEntity" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="AccountNumber" property="accountnumber" jdbcType="VARCHAR" />
+    <result column="AccountType" property="accounttype" jdbcType="VARCHAR" />
+    <result column="DepositNumber" property="depositnumber" jdbcType="VARCHAR" />
+    <result column="DepositAmount" property="depositamount" jdbcType="DECIMAL" />
+    <result column="TermPeriod" property="termperiod" jdbcType="VARCHAR" />
+    <result column="TermInterestRate" property="terminterestrate" jdbcType="DECIMAL" />
+    <result column="MaturityDate" property="maturitydate" jdbcType="DATE" />
+    <result column="MaturityInterest" property="maturityinterest" jdbcType="DECIMAL" />
+    <result column="MaturityAmount" property="maturityamount" jdbcType="DECIMAL" />
+    <result column="MaturityStatus" property="maturitystatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- <select id="searchTermIDAndAccount" resultMap="BaseResultMap" parameterType="com.csi.sbs.deposit.business.entity.TermDepositEnquiryEntity" >
+    select * from t_termdeposit_master
+    where ID = #{id,jdbcType=VARCHAR}  and  AccountNumber = #{accountnumber,jdbcType=VARCHAR}
+  </select> -->
+  
+  
+  <select id="searchTermIDAndAccount" resultType="java.lang.Integer">
+    select count(*) from t_termdeposit_master
+    where ID = #{0,jdbcType=VARCHAR}  and  AccountNumber = #{1,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>
