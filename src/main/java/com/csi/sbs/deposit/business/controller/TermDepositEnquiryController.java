@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.csi.sbs.deposit.business.service.TermDepositEnquiryService;
-import com.csi.sbs.common.business.httpclient.ConnPostClient;
+import org.springframework.web.client.RestTemplate;
 import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.TermDepositEnquiryModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,6 +29,9 @@ public class TermDepositEnquiryController {
 
 	@Resource
 	private TermDepositEnquiryService termDepositEnquiryService;
+	
+	@Resource
+	private RestTemplate restTemplate;
 	
 	ObjectMapper objectMapper = new ObjectMapper();
 	@RequestMapping(value = "/termDepositEnquiry", method = RequestMethod.POST)

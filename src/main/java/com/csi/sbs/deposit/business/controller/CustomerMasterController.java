@@ -35,7 +35,6 @@ import com.csi.sbs.common.business.constant.CommonConstant;
 import com.csi.sbs.deposit.business.clientmodel.CloseAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerMaintenanceModel;
-import com.csi.sbs.deposit.business.clientmodel.AccountMasterModel;
 import com.csi.sbs.deposit.business.clientmodel.AccountNumber;
 import com.csi.sbs.deposit.business.clientmodel.DepositModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
@@ -384,7 +383,7 @@ public class CustomerMasterController {
 	}
 	
 	/**
-	 * 查找账号
+	 * 查找账号 Alina 
 	 * 
 	 * @param accountNumModel
 	 * @return
@@ -410,7 +409,7 @@ public class CustomerMasterController {
 	}
 	
 	/**
-	 * 查找账号
+	 * Alina 查找账号
 	 * 
 	 * @param accountNumModel
 	 * @return
