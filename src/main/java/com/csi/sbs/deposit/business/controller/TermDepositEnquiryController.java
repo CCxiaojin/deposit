@@ -17,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.csi.sbs.deposit.business.service.TermDepositEnquiryService;
 import com.csi.sbs.deposit.business.util.PostUtil;
-import com.csi.sbs.common.business.constant.CommonConstant;
 import com.csi.sbs.deposit.business.clientmodel.TermDepositEnquiryModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.fasterxml.jackson.core.JsonProcessingException;

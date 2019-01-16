@@ -15,6 +15,7 @@ public class AccountMasterModel {
 
     private String accountnumber;
 
+    @ApiModelProperty(required=true)
     private String accounttype;
 
     private String accountstatus;

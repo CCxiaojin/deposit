@@ -51,6 +51,9 @@ public class SysConstant {
 	   //操作状态
 	   public static final String OPERATION_SUCCESS = "success";
 	   public static final String OPERATION_FAIL = "fail";
+	   
+	   //可用CustomerNumber Item
+	   public static final String NEXT_AVAILABLE_CUSTOMERNUMBER = "NextAvailableCustomerNumber";
 
 	   
 	   //写日志服务地址
