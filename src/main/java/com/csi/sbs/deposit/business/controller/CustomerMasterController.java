@@ -1,6 +1,7 @@
 package com.csi.sbs.deposit.business.controller;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import com.csi.sbs.common.business.constant.CommonConstant;
 import com.csi.sbs.deposit.business.clientmodel.CloseAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerMaintenanceModel;
+import com.csi.sbs.deposit.business.clientmodel.AccountNumber;
 import com.csi.sbs.deposit.business.clientmodel.DepositModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
@@ -444,7 +446,78 @@ public class CustomerMasterController {
 		}
 		return objectMapper.writeValueAsString(map);
 	}
-
+	
+	/**
+	 * 查找账号 Alina 
+	 * 
+	 * @param accountNumModel
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value="/accountSearch", method = RequestMethod.POST)
+	@ResponseBody
+	@ApiOperation(value = "This api is for account search", notes = "version 0.0.1")
+	@ApiImplicitParam(paramType = "body", name = "accountNumModel", required = true, value = "accountNumModel")
+	public String accountSearch(@RequestBody AccountNumber accountNumModel) throws JsonProcessingException{
+		Map<String, Object> map = new HashMap<String, Object>();
+		AccountMasterEntity ame = new AccountMasterEntity();
+		ame.setAccountnumber(accountNumModel.getAccountNumber());
+		ame.setAccounttype(accountNumModel.getAccountType());
+		ame.setCurrencycode(accountNumModel.getCcycode());
+		// 根据accountNumber查询账号
+		List<AccountMasterEntity> accountList = accountMasterService.findAccountByParams(ame);
+		if(accountList == null || accountList.size() == 0){
+			return null;
+		}else{
+			return objectMapper.writeValueAsString(accountList.get(0));
+		}
+	}
+	
+	/**
+	 * Alina 查找账号
+	 * 
+	 * @param accountNumModel
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value="/updateAccountInfo", method = RequestMethod.POST)
+	@ResponseBody
+	@ApiOperation(value = "This api is for update account master information", notes = "version 0.0.1")
+	@ApiImplicitParam(paramType = "body", name = "accountNumModel", required = true, value = "accountNumModel")
+	public String updateAccountInfo(@RequestBody AccountMasterEntity accountInfo) throws JsonProcessingException{
+		Map<String, Object> map = new HashMap<String, Object>();
+		Date lastupdateddate = null;
+		try {
+			lastupdateddate= sf.parse(sf.format(new Date()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		accountInfo.setLastupdateddate(lastupdateddate);
+		try{
+			int a = accountMasterService.update(accountInfo);
+			if(a>0){
+				map.put("msg", "update success");
+				map.put("code", "1");
+				String logstr = "update accountNumber:" + accountInfo.getAccountnumber() + " account infomation success!";
+				LogUtil.saveLog(
+						restTemplate, 
+						SysConstant.OPERATION_UPDATE, 
+						SysConstant.LOCAL_SERVICE_NAME, 
+						SysConstant.OPERATION_SUCCESS, 
+						logstr
+						);
+			}else{
+				map.put("msg", "Record Change Fail");
+				map.put("code", "0");
+			}
+		}catch(Exception e){
+			map.put("msg", "Record Change Fail");
+			map.put("code", "0");
+		}
+		return objectMapper.writeValueAsString(map);
+	}
+	
 	/**
 	 * 创建账号公共业务处理
 	 * 
