@@ -35,6 +35,7 @@ import com.csi.sbs.deposit.business.clientmodel.CloseAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerMaintenanceModel;
 import com.csi.sbs.deposit.business.clientmodel.DepositModel;
+import com.csi.sbs.deposit.business.clientmodel.WithDrawalModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
 import com.csi.sbs.deposit.business.entity.CustomerMasterEntity;
@@ -433,11 +434,11 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for withdrawal", notes = "version 0.0.1")
 	@ApiResponses({ @ApiResponse(code = 0, message = "withdrawal Fail!"),
 			@ApiResponse(code = 1, message = "withdrawal Success!") })
-	@ApiImplicitParam(paramType = "body", name = "depositModel", required = true, value = "depositModel")
-	public String withdrawal(@RequestBody DepositModel depositModel) throws JsonProcessingException {
+	@ApiImplicitParam(paramType = "body", name = "withDrawalModel", required = true, value = "withDrawalModel")
+	public String withdrawal(@RequestBody WithDrawalModel withDrawalModel) throws JsonProcessingException {
 		Map<String, Object> map = null;
 		try {
-			map = accountMasterService.deposit(depositModel, restTemplate);
+			map = accountMasterService.withdrawal(withDrawalModel, restTemplate);
 		} catch (Exception e) {
 			map.put("msg", "Transaction Fail");
 			map.put("code", "0");
@@ -508,7 +509,7 @@ public class CustomerMasterController {
 
 		// 调用可用customerNumber服务接口
 		String result3 = restTemplate
-				.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber", String.class).getBody();
+				.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber/NextAvailableCustomerNumber", String.class).getBody();
 		String customerNumber = "";
 		if (result3 == null) {
 			map.put("msg", "调用系统参数失败");

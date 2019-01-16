@@ -14,15 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.csi.sbs.common.business.util.UUIDUtil;
+import com.csi.sbs.common.business.constant.CommonConstant;
 import com.csi.sbs.deposit.business.clientmodel.CurrencyModel;
 import com.csi.sbs.deposit.business.clientmodel.DepositModel;
 import com.csi.sbs.deposit.business.clientmodel.WithDrawalModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.dao.AccountMasterDao;
 import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
-import com.csi.sbs.deposit.business.entity.SysTransactionLogEntity;
 import com.csi.sbs.deposit.business.service.AccountMasterService;
+import com.csi.sbs.deposit.business.util.LogUtil;
 
 @Service("AccountMasterService")
 public class AccountMasterServiceImpl implements AccountMasterService{
@@ -65,7 +65,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		//校验是否支持输入的ccy
 		CurrencyModel currency = new CurrencyModel();
 		currency.setCcycode(depositModel.getDepositCCyCode());
-		String flag = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", currency,String.class);
+		String flag = restTemplate.postForObject("http://"+CommonConstant.getSYSADMIN()+"/sysadmin/isSupportbyccy", currency,String.class);
 		if(flag.equals("false")){
 			map.put("msg", "Currency Not Supported");
 			map.put("code", "1");
@@ -106,32 +106,17 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		//存款
 		accountMasterDao.deposit(account);
 		//写入日志
-		depositLog(depositModel.getAccountNumber(),restTemplate);
-		
+		String logstr = "Transaction Accepted:" + depositModel.getAccountNumber();
+		LogUtil.saveLog(
+				restTemplate, 
+				SysConstant.OPERATION_UPDATE, 
+				SysConstant.LOCAL_SERVICE_NAME, 
+				SysConstant.OPERATION_SUCCESS, 
+				logstr);
 		map.put("msg", "Transaction Accepted:" + depositModel.getAccountNumber());
 		map.put("code", "1");
 			
 		return map;
-	}
-	
-	/**
-	 * 存款日志
-	 * @param accountNumber
-	 * @return
-	 * @throws ParseException 
-	 */
-	private String depositLog(String accountNumber,RestTemplate restTemplate) throws ParseException {
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SysTransactionLogEntity log = new SysTransactionLogEntity();
-		log.setId(UUIDUtil.generateUUID());
-		log.setOperationtype(SysConstant.OPERATION_UPDATE);
-		log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
-		log.setOperationstate(SysConstant.OPERATION_SUCCESS);
-		log.setOperationdate(sf.parse(sf.format(new Date())));
-		log.setOperationdetail("Transaction Accepted:" + accountNumber);
-		@SuppressWarnings("unused")
-		String result = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", log,String.class);
-		return accountNumber;
 	}
 
 	/**
@@ -168,7 +153,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		//校验是否支持输入的ccy
 		CurrencyModel currency = new CurrencyModel();
 		currency.setCcycode(withDrawalModel.getWithDrawalCCyCode());
-		String flag = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", currency,String.class);
+		String flag = restTemplate.postForObject("http://"+CommonConstant.getSYSADMIN()+"/sysadmin/isSupportbyccy", currency,String.class);
 		if(flag.equals("false")){
 			map.put("msg", "Currency Not Supported");
 			map.put("code", "1");
@@ -216,8 +201,13 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		//取款
 		accountMasterDao.withdrawal(account);
 		//写入日志
-		withDrawalLog(withDrawalModel.getAccountNumber(),restTemplate);
-		
+		String logstr = "Transaction Accepted:" + withDrawalModel.getAccountNumber();
+		LogUtil.saveLog(
+				restTemplate, 
+				SysConstant.OPERATION_UPDATE, 
+				SysConstant.LOCAL_SERVICE_NAME,
+				SysConstant.OPERATION_SUCCESS, 
+				logstr);
 		map.put("msg", "Transaction Accepted:" + withDrawalModel.getAccountNumber());
 		map.put("code", "1");
 			
@@ -241,25 +231,4 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		}
 		return true;
 	}
-
-    /**
-     * withDrawalLog
-     * @param accountNumber
-     * @param restTemplate
-     * @return
-     * @throws ParseException
-     */
-	private String withDrawalLog(String accountNumber,RestTemplate restTemplate) throws ParseException {
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SysTransactionLogEntity log = new SysTransactionLogEntity();
-		log.setId(UUIDUtil.generateUUID());
-		log.setOperationtype(SysConstant.OPERATION_UPDATE);
-		log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
-		log.setOperationstate(SysConstant.OPERATION_SUCCESS);
-		log.setOperationdate(sf.parse(sf.format(new Date())));
-		log.setOperationdetail("Transaction Accepted:" + accountNumber);
-		@SuppressWarnings("unused")
-		String result = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", log,String.class);
-		return accountNumber;
-	} 
 }
