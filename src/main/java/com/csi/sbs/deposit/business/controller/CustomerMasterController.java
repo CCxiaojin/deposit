@@ -10,12 +10,14 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,10 +29,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import com.alibaba.fastjson.JSONObject;
-import com.csi.sbs.common.business.httpclient.ConnGetClient;
-import com.csi.sbs.common.business.httpclient.ConnPostClient;
 import com.csi.sbs.common.business.json.JsonProcess;
 import com.csi.sbs.common.business.util.UUIDUtil;
+import com.csi.sbs.common.business.constant.CommonConstant;
 import com.csi.sbs.deposit.business.clientmodel.CloseAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerAndAccountModel;
 import com.csi.sbs.deposit.business.clientmodel.CustomerMaintenanceModel;
@@ -43,7 +44,7 @@ import com.csi.sbs.deposit.business.entity.CustomerMasterEntity;
 import com.csi.sbs.deposit.business.entity.SysTransactionLogEntity;
 import com.csi.sbs.deposit.business.service.AccountMasterService;
 import com.csi.sbs.deposit.business.service.CustomerMasterService;
-import com.csi.sbs.deposit.business.util.WriteLogUtil;
+import com.csi.sbs.deposit.business.util.PostUtil;
 
 @CrossOrigin // 解决跨域请求
 @Controller
@@ -56,6 +57,10 @@ public class CustomerMasterController {
 
 	@Resource
 	private AccountMasterService accountMasterService;
+	
+	@Resource
+	private RestTemplate restTemplate;
+
 
 	private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -370,7 +375,7 @@ public class CustomerMasterController {
 			throws JsonProcessingException {
 		Map<String,Object> map = null;
 		try {
-			map = accountMasterService.deposit(depositModel);
+			map = accountMasterService.deposit(depositModel,restTemplate);
 		} catch (Exception e) {
 			map.put("msg", "Transaction Fail");
 			map.put("code", "0");
@@ -461,17 +466,17 @@ public class CustomerMasterController {
 		}
 
 		// 调用服务接口地址
-		String params1 = "{\"apiname\":\"getSystemParameter\"}";
-		String result1 = ConnPostClient.postJson(SysConstant.SERVICE_INTERNAL_URL, params1);
+		String param1 = "{\"apiname\":\"getSystemParameter\"}";
+        ResponseEntity<String> result1 = restTemplate.postForEntity("http://"+CommonConstant.getSYSADMIN()+SysConstant.SERVICE_INTERNAL_URL+"", PostUtil.getRequestEntity(param1),String.class);
 		if (result1 == null) {
 			map.put("msg", "调用服务接口地址失败");
 			map.put("code", "0");
 		}
-		String path = JsonProcess.returnValue(JsonProcess.changeToJSONObject(result1), "internaURL");
+		String path = JsonProcess.returnValue(JsonProcess.changeToJSONObject(result1.getBody()), "internaURL");
 
 		// 调用系统参数服务接口
-		String params2 = "{\"item\":\"ClearingCode,BranchNumber,LocalCcy,NextAvailableCustomerNumber\"}";
-		String result2 = ConnPostClient.postJson(path, params2);
+		String param2 = "{\"item\":\"ClearingCode,BranchNumber,LocalCcy,NextAvailableCustomerNumber\"}";
+        ResponseEntity<String> result2 = restTemplate.postForEntity(path, PostUtil.getRequestEntity(param2),String.class);
 		if (result2 == null) {
 			map.put("msg", "调用系统参数失败");
 			map.put("code", "0");
@@ -484,8 +489,8 @@ public class CustomerMasterController {
 		JSONObject jsonObject1 = null;
 		String revalue = null;
 		String temp = null;
-		for (int i = 0; i < JsonProcess.changeToJSONArray(result2).size(); i++) {
-			jsonObject1 = JsonProcess.changeToJSONObject(JsonProcess.changeToJSONArray(result2).get(i).toString());
+		for (int i = 0; i < JsonProcess.changeToJSONArray(result2.getBody()).size(); i++) {
+			jsonObject1 = JsonProcess.changeToJSONObject(JsonProcess.changeToJSONArray(result2.getBody()).get(i).toString());
 			revalue = JsonProcess.returnValue(jsonObject1, "item");
 			temp = JsonProcess.returnValue(jsonObject1, "value");
 			if (revalue.equals("BranchNumber")) {
@@ -500,8 +505,8 @@ public class CustomerMasterController {
 		}
 
 		// 调用可用customerNumber服务接口
+        String result3 = restTemplate.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber", String.class).getBody();
 		String customerNumber = "";
-		String result3 = ConnGetClient.get("http://localhost:8083/sysadmin/generate/getNextAvailableNumber");
 		if (result3 == null) {
 			map.put("msg", "调用系统参数失败");
 			map.put("code", "0");
@@ -516,7 +521,6 @@ public class CustomerMasterController {
 		cam.getAccount().setBalance(new BigDecimal(0));
 		cam.getAccount().setId(UUIDUtil.generateUUID());
 		cam.getAccount().setAccountnumber(clearcode + branchnumber + customerNumber);
-		// cam.getAccount().setCustomerprimarykeyid(customerprimarykeyid);
 
 		map.put("msg", "处理成功");
 		map.put("localCCy", localCCy);
@@ -540,7 +544,9 @@ public class CustomerMasterController {
 			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
 			log.setOperationdate(sf.parse(sf.format(new Date())));
 			log.setOperationdetail("create accountNumber:" + accountNumber + " success!");
-			WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+			
+			@SuppressWarnings("unused")
+			ResponseEntity<String> result2 = restTemplate.postForEntity(SysConstant.WRITE_LOG_SERVICEPATH, PostUtil.getRequestEntity(JsonProcess.changeEntityTOJSON(log)),String.class);
 		} catch (Exception e) {
 			return false;
 		}
@@ -562,7 +568,9 @@ public class CustomerMasterController {
 			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
 			log.setOperationdate(sf.parse(sf.format(new Date())));
 			log.setOperationdetail("close accountNumber:" + accountNumber + " success!");
-			WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+			
+			@SuppressWarnings("unused")
+			ResponseEntity<String> result2 = restTemplate.postForEntity(SysConstant.WRITE_LOG_SERVICEPATH, PostUtil.getRequestEntity(JsonProcess.changeEntityTOJSON(log)),String.class);
 		} catch (Exception e) {
 			return false;
 		}
@@ -581,7 +589,9 @@ public class CustomerMasterController {
 			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
 			log.setOperationdate(sf.parse(sf.format(new Date())));
 			log.setOperationdetail("update accountNumber:" + accountNumber + " contact information success!");
-			WriteLogUtil.writeLog(SysConstant.WRITE_LOG_SERVICEPATH, JsonProcess.changeEntityTOJSON(log));
+			
+			@SuppressWarnings("unused")
+			ResponseEntity<String> result2 = restTemplate.postForEntity(SysConstant.WRITE_LOG_SERVICEPATH, PostUtil.getRequestEntity(JsonProcess.changeEntityTOJSON(log)),String.class);
 		} catch (Exception e) {
 			return false;
 		}
@@ -633,7 +643,7 @@ public class CustomerMasterController {
 	 */
 	private void availableNumberIncrease() {
 		Map<String,Object> map = new HashMap<String,Object>();
-		String currentNumber = ConnGetClient.get("http://localhost:8083/sysadmin/generate/getNextAvailableNumber");
+		String currentNumber = restTemplate.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber", String.class).getBody();
 		if (currentNumber == null) {
 			map.put("msg", "调用系统参数失败");
 			map.put("code", "0");
@@ -665,9 +675,9 @@ public class CustomerMasterController {
 		}
 		
 		
-		String params2 = "{\"value\":\""+appendSave+"\"}";
-		String result2 = ConnPostClient.postJson("http://localhost:8083/sysadmin/generate/saveNextAvailableNumber", params2);
-		if (result2 == null) {
+        String param = "{\"value\":\""+appendSave+"\"}";
+		ResponseEntity<String> result = restTemplate.postForEntity("http://SYSADMIN/sysadmin/generate/saveNextAvailableNumber", PostUtil.getRequestEntity(param),String.class);
+		if (!result.getStatusCode().equals("200")) {
 			map.put("msg", "生成下一个可用number失败");
 			map.put("code", "0");
 		}

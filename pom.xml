@@ -18,6 +18,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<spring-cloud.version>Edgware.SR5</spring-cloud.version>
 	</properties>
 
 	<dependencies>
@@ -69,7 +70,7 @@
         <dependency>
            <groupId>com.csi.sbs</groupId>
            <artifactId>common</artifactId>
-           <version>0.0.1</version>
+           <version>0.0.2</version>
         </dependency>
         
         <!-- 引入模板引擎jar包 -->
@@ -78,20 +79,40 @@
            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 		
-		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.8.0</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.8.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
+		</dependency>
 	</dependencies>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 	    <plugins>
@@ -99,31 +120,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
-			<!-- <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-                <executions>
-                  <execution>
-                     <id>install-common</id>
-                     <phase>clean</phase>
-                     <configuration>
-                       <file>C:/Users/gaonana/Desktop/common.jar</file>
-                         <repositoryLayout>default</repositoryLayout>
-                         <groupId>com.csi.sbs</groupId>
-                         <artifactId>common</artifactId>
-                         <version>0.0.1-SNAPSHOT</version>
-                         <packaging>jar</packaging>
-                         <generatePom>true</generatePom>
-                     </configuration>
-                     <goals>
-                       <goal>install-file</goal>
-                     </goals>
-                   </execution>
-                 </executions>
-              </plugin>  -->
-
 		</plugins>
 		<finalName>deposit</finalName>
 	</build>
