@@ -19,6 +19,6 @@ public interface AccountMasterService {
 	   
 	   public Map<String,Object> deposit(DepositModel depositModel) throws ParseException;
 	   
-	   
+	   public int update(AccountMasterEntity ame);
 
 }
