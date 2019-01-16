@@ -16,4 +16,6 @@ public interface AccountMasterDao<T> extends BaseDao<T> {
 	
 	public int deposit(AccountMasterEntity ame);
 	
+	public int withdrawal(AccountMasterEntity ame);
+	
 }

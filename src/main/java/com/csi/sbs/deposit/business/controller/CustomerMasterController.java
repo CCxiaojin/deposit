@@ -379,6 +379,31 @@ public class CustomerMasterController {
 		}
 		return objectMapper.writeValueAsString(map);
 	}
+	
+	/**
+	 * 取款
+	 * 
+	 * @param cam
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value = "/withdrawal", method = RequestMethod.POST)
+	@ResponseBody
+	@ApiOperation(value = "This api is for withdrawal", notes = "version 0.0.1")
+	@ApiResponses({ @ApiResponse(code = 0, message = "withdrawal Fail!"),
+			@ApiResponse(code = 1, message = "withdrawal Success!") })
+	@ApiImplicitParam(paramType = "body", name = "depositModel", required = true, value = "depositModel")
+	public String withdrawal(@RequestBody DepositModel depositModel)
+			throws JsonProcessingException {
+		Map<String,Object> map = null;
+		try {
+			map = accountMasterService.deposit(depositModel,restTemplate);
+		} catch (Exception e) {
+			map.put("msg", "Transaction Fail");
+			map.put("code", "0");
+		}
+		return objectMapper.writeValueAsString(map);
+	}
 
 	/**
 	 * 创建账号公共业务处理
