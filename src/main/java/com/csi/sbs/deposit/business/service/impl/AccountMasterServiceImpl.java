@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.csi.sbs.common.business.util.UUIDUtil;
 import com.csi.sbs.deposit.business.clientmodel.CurrencyModel;
 import com.csi.sbs.deposit.business.clientmodel.DepositModel;
+import com.csi.sbs.deposit.business.clientmodel.WithDrawalModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.dao.AccountMasterDao;
 import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
@@ -69,7 +70,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		currency.setCcycode(depositModel.getDepositCCyCode());
 		String flag = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", currency,String.class);
 		if(flag.equals("false")){
-			map.put("msg", "Currency Not Found");
+			map.put("msg", "Currency Not Supported");
 			map.put("code", "1");
 			
 			return map;
@@ -136,7 +137,11 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		return accountNumber;
 	}
 
-	
+	/**
+	 * 存款必填字段校验
+	 * @param depositModel
+	 * @return
+	 */
 	private boolean validateMandatoryField(DepositModel depositModel){
 		if(depositModel.getAccountNumber()==null || "".equals(depositModel.getAccountNumber())){
 			return false;
@@ -151,4 +156,115 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 	}
 
 
+
+	@Override
+	@Transactional
+	public Map<String, Object> withdrawal(WithDrawalModel withDrawalModel, RestTemplate restTemplate)
+			throws ParseException {
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Map<String,Object> map = new HashMap<String,Object>();
+		//校验必填字段
+		if(!validateMandatoryField(withDrawalModel)){
+			map.put("msg", "Required field incomplete");
+			map.put("code", "0");
+			
+			return map;
+		}
+		//校验是否支持输入的ccy
+		CurrencyModel currency = new CurrencyModel();
+		currency.setCcycode(withDrawalModel.getWithDrawalCCyCode());
+		String flag = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", currency,String.class);
+		if(flag.equals("false")){
+			map.put("msg", "Currency Not Supported");
+			map.put("code", "1");
+			
+			return map;
+		}
+		//根据accountNumber 和 ccy 查询
+		AccountMasterEntity account = new AccountMasterEntity();
+		account.setAccountnumber(withDrawalModel.getAccountNumber());
+		account.setCurrencycode(withDrawalModel.getWithDrawalCCyCode());
+		
+		@SuppressWarnings("unchecked")
+		List<AccountMasterEntity> accountList = accountMasterDao.findAccountByParams(account);
+		if(accountList==null || accountList.size()==0){
+			map.put("msg", "Record Not Found");
+			map.put("code", "0");
+			
+			return map;
+		}
+		//校验账号状态是否是Active的
+		if(!accountList.get(0).getAccountstatus().equals(SysConstant.ACCOUNT_STATE2)){
+			map.put("msg", "Account is not active");
+			map.put("code", "0");
+			
+			return map;
+		}
+		//check账户余额
+		if(accountList.get(0).getBalance().compareTo(BigDecimal.valueOf(Double.parseDouble(withDrawalModel.getWithDrawalAmount())))==-1){
+			map.put("msg", "Insufficient Fund");
+			map.put("code", "0");
+			
+			return map;
+		}
+		
+		//减账户余额
+		//原来余额
+		BigDecimal balance1 = BigDecimal.valueOf(Double.parseDouble(accountList.get(0).getBalance().toString()));
+		//取款余额
+		BigDecimal balance2 = BigDecimal.valueOf(Double.parseDouble(withDrawalModel.getWithDrawalAmount()));
+		//总余额
+		BigDecimal balance3 = balance1.subtract(balance2);
+		account.setBalance(balance3);
+		account.setLastupdateddate(sf.parse(sf.format(new Date())));
+		
+		//取款
+		accountMasterDao.withdrawal(account);
+		//写入日志
+		withDrawalLog(withDrawalModel.getAccountNumber(),restTemplate);
+		
+		map.put("msg", "Transaction Accepted:" + withDrawalModel.getAccountNumber());
+		map.put("code", "1");
+			
+		return map;
+	}
+	
+	/**
+	 * 存款必填字段校验
+	 * @param depositModel
+	 * @return
+	 */
+	private boolean validateMandatoryField(WithDrawalModel withDrawalModel){
+		if(withDrawalModel.getAccountNumber()==null || "".equals(withDrawalModel.getAccountNumber())){
+			return false;
+		}
+		if(withDrawalModel.getWithDrawalAmount()==null || "".equals(withDrawalModel.getWithDrawalAmount()) || withDrawalModel.getWithDrawalAmount().equals("0")){
+			return false;
+		}
+		if(withDrawalModel.getWithDrawalCCyCode()==null || "".equals(withDrawalModel.getWithDrawalCCyCode())){
+			return false;
+		}
+		return true;
+	}
+
+    /**
+     * withDrawalLog
+     * @param accountNumber
+     * @param restTemplate
+     * @return
+     * @throws ParseException
+     */
+	private String withDrawalLog(String accountNumber,RestTemplate restTemplate) throws ParseException {
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SysTransactionLogEntity log = new SysTransactionLogEntity();
+		log.setId(UUIDUtil.generateUUID());
+		log.setOperationtype(SysConstant.OPERATION_UPDATE);
+		log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
+		log.setOperationstate(SysConstant.OPERATION_SUCCESS);
+		log.setOperationdate(sf.parse(sf.format(new Date())));
+		log.setOperationdetail("Transaction Accepted:" + accountNumber);
+		@SuppressWarnings("unused")
+		String result = restTemplate.postForObject("http://localhost:8083/sysadmin/isSupportbyccy", log,String.class);
+		return accountNumber;
+	} 
 }

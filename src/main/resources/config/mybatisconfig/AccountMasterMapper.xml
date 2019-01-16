@@ -162,4 +162,17 @@
     where AccountNumber = #{accountnumber,jdbcType=VARCHAR}
   </update>
   
+  <update id="withdrawal" parameterType="com.csi.sbs.deposit.business.entity.AccountMasterEntity" >
+    update t_account_master
+    <set >
+      <if test="balance != null" >
+        Balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="lastupdateddate != null" >
+        LastUpdatedDate = #{lastupdateddate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where AccountNumber = #{accountnumber,jdbcType=VARCHAR}
+  </update>
+  
 </mapper>

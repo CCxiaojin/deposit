@@ -40,9 +40,10 @@ import com.csi.sbs.deposit.business.clientmodel.DepositModel;
 import com.csi.sbs.deposit.business.constant.SysConstant;
 import com.csi.sbs.deposit.business.entity.AccountMasterEntity;
 import com.csi.sbs.deposit.business.entity.CustomerMasterEntity;
-import com.csi.sbs.deposit.business.entity.SysTransactionLogEntity;
 import com.csi.sbs.deposit.business.service.AccountMasterService;
 import com.csi.sbs.deposit.business.service.CustomerMasterService;
+import com.csi.sbs.deposit.business.util.AvailableNumberUtil;
+import com.csi.sbs.deposit.business.util.LogUtil;
 import com.csi.sbs.deposit.business.util.PostUtil;
 
 @CrossOrigin // 解决跨域请求
@@ -56,10 +57,9 @@ public class CustomerMasterController {
 
 	@Resource
 	private AccountMasterService accountMasterService;
-	
+
 	@Resource
 	private RestTemplate restTemplate;
-
 
 	private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -101,8 +101,15 @@ public class CustomerMasterController {
 			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
 
 			// 写入日志
-			createAccountLog(temp[0]);
-			availableNumberIncrease();
+			String logstr = "create accountNumber:" + temp[0] + " success!";
+			LogUtil.saveLog(
+					restTemplate, 
+					SysConstant.OPERATION_CREATE, 
+					SysConstant.LOCAL_SERVICE_NAME, 
+					SysConstant.OPERATION_SUCCESS, 
+					logstr
+					);
+			AvailableNumberUtil.availableNumberIncrease(restTemplate, SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
@@ -149,8 +156,15 @@ public class CustomerMasterController {
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE2);
 			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
 			// 写入日志
-			createAccountLog(temp[0]);
-			availableNumberIncrease();
+			String logstr = "create accountNumber:" + temp[0] + " success!";
+			LogUtil.saveLog(
+					restTemplate, 
+					SysConstant.OPERATION_CREATE, 
+					SysConstant.LOCAL_SERVICE_NAME, 
+					SysConstant.OPERATION_SUCCESS,
+					logstr
+					);
+			AvailableNumberUtil.availableNumberIncrease(restTemplate, SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
@@ -196,8 +210,15 @@ public class CustomerMasterController {
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE3);
 			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
 			// 写入日志
-			createAccountLog(temp[0]);
-			availableNumberIncrease();
+			String logstr = "create accountNumber:" + temp[0] + " success!";
+			LogUtil.saveLog(
+					restTemplate, 
+					SysConstant.OPERATION_CREATE, 
+					SysConstant.LOCAL_SERVICE_NAME, 
+					SysConstant.OPERATION_SUCCESS,
+					logstr
+					);
+			AvailableNumberUtil.availableNumberIncrease(restTemplate, SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
@@ -242,8 +263,15 @@ public class CustomerMasterController {
 			customerAndAccountModel.getAccount().setAccounttype(SysConstant.ACCOUNT_TYPE4);
 			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
 			// 写入日志
-			createAccountLog(temp[0]);
-			availableNumberIncrease();
+			String logstr = "create accountNumber:" + temp[0] + " success!";
+			LogUtil.saveLog(
+					restTemplate, 
+					SysConstant.OPERATION_CREATE, 
+					SysConstant.LOCAL_SERVICE_NAME, 
+					SysConstant.OPERATION_SUCCESS, 
+					logstr
+					);
+			AvailableNumberUtil.availableNumberIncrease(restTemplate, SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
 			map.put("code", "1");
@@ -294,7 +322,14 @@ public class CustomerMasterController {
 			if (accountMasterService.closeAccount(ame) > 0) {
 				map.put("msg", "Account Deleted Success");
 				map.put("code", "1");
-				closeAccountLog(ame.getAccountnumber());
+				String logstr = "close accountNumber:" + ame.getAccountnumber() + " success!";
+				LogUtil.saveLog(
+						restTemplate, 
+						SysConstant.OPERATION_UPDATE, 
+						SysConstant.LOCAL_SERVICE_NAME, 
+						SysConstant.OPERATION_SUCCESS, 
+						logstr
+						);
 			} else {
 				map.put("msg", "Account Deleted Fail");
 				map.put("code", "0");
@@ -342,7 +377,14 @@ public class CustomerMasterController {
 				map.put("msg", customerMaintenanceModel.getAccountNumber()
 						+ "-Customer Contact Information already Record Changed");
 				map.put("code", "1");
-				updateAccountLog(customerMaintenanceModel.getAccountNumber());
+				String logstr = "update accountNumber:" + customerMaintenanceModel.getAccountNumber() + " contact information success!";
+				LogUtil.saveLog(
+						restTemplate, 
+						SysConstant.OPERATION_UPDATE, 
+						SysConstant.LOCAL_SERVICE_NAME, 
+						SysConstant.OPERATION_SUCCESS, 
+						logstr
+						);
 				return objectMapper.writeValueAsString(map);
 			} else {
 				map.put("msg", "Record Change Fail");
@@ -356,7 +398,7 @@ public class CustomerMasterController {
 
 		return objectMapper.writeValueAsString(map);
 	}
-	
+
 	/**
 	 * 存款
 	 * 
@@ -370,11 +412,34 @@ public class CustomerMasterController {
 	@ApiResponses({ @ApiResponse(code = 0, message = "deposit Fail!"),
 			@ApiResponse(code = 1, message = "deposit Success!") })
 	@ApiImplicitParam(paramType = "body", name = "depositModel", required = true, value = "depositModel")
-	public String deposit(@RequestBody DepositModel depositModel)
-			throws JsonProcessingException {
-		Map<String,Object> map = null;
+	public String deposit(@RequestBody DepositModel depositModel) throws JsonProcessingException {
+		Map<String, Object> map = null;
 		try {
-			map = accountMasterService.deposit(depositModel,restTemplate);
+			map = accountMasterService.deposit(depositModel, restTemplate);
+		} catch (Exception e) {
+			map.put("msg", "Transaction Fail");
+			map.put("code", "0");
+		}
+		return objectMapper.writeValueAsString(map);
+	}
+
+	/**
+	 * 取款
+	 * 
+	 * @param cam
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value = "/withdrawal", method = RequestMethod.POST)
+	@ResponseBody
+	@ApiOperation(value = "This api is for withdrawal", notes = "version 0.0.1")
+	@ApiResponses({ @ApiResponse(code = 0, message = "withdrawal Fail!"),
+			@ApiResponse(code = 1, message = "withdrawal Success!") })
+	@ApiImplicitParam(paramType = "body", name = "depositModel", required = true, value = "depositModel")
+	public String withdrawal(@RequestBody DepositModel depositModel) throws JsonProcessingException {
+		Map<String, Object> map = null;
+		try {
+			map = accountMasterService.deposit(depositModel, restTemplate);
 		} catch (Exception e) {
 			map.put("msg", "Transaction Fail");
 			map.put("code", "0");
@@ -434,7 +499,14 @@ public class CustomerMasterController {
 			if(a>0){
 				map.put("msg", "update success");
 				map.put("code", "1");
-				updateAccountLog(accountInfo.getAccountnumber());
+				String logstr = "update accountNumber:" + accountInfo.getAccountnumber() + " account infomation success!";
+				LogUtil.saveLog(
+						restTemplate, 
+						SysConstant.OPERATION_UPDATE, 
+						SysConstant.LOCAL_SERVICE_NAME, 
+						SysConstant.OPERATION_SUCCESS, 
+						logstr
+						);
 			}else{
 				map.put("msg", "Record Change Fail");
 				map.put("code", "0");
@@ -466,7 +538,9 @@ public class CustomerMasterController {
 
 		// 调用服务接口地址
 		String param1 = "{\"apiname\":\"getSystemParameter\"}";
-        ResponseEntity<String> result1 = restTemplate.postForEntity("http://"+CommonConstant.getSYSADMIN()+SysConstant.SERVICE_INTERNAL_URL+"", PostUtil.getRequestEntity(param1),String.class);
+		ResponseEntity<String> result1 = restTemplate.postForEntity(
+				"http://" + CommonConstant.getSYSADMIN() + SysConstant.SERVICE_INTERNAL_URL + "",
+				PostUtil.getRequestEntity(param1), String.class);
 		if (result1 == null) {
 			map.put("msg", "调用服务接口地址失败");
 			map.put("code", "0");
@@ -475,7 +549,8 @@ public class CustomerMasterController {
 
 		// 调用系统参数服务接口
 		String param2 = "{\"item\":\"ClearingCode,BranchNumber,LocalCcy,NextAvailableCustomerNumber\"}";
-        ResponseEntity<String> result2 = restTemplate.postForEntity(path, PostUtil.getRequestEntity(param2),String.class);
+		ResponseEntity<String> result2 = restTemplate.postForEntity(path, PostUtil.getRequestEntity(param2),
+				String.class);
 		if (result2 == null) {
 			map.put("msg", "调用系统参数失败");
 			map.put("code", "0");
@@ -489,7 +564,8 @@ public class CustomerMasterController {
 		String revalue = null;
 		String temp = null;
 		for (int i = 0; i < JsonProcess.changeToJSONArray(result2.getBody()).size(); i++) {
-			jsonObject1 = JsonProcess.changeToJSONObject(JsonProcess.changeToJSONArray(result2.getBody()).get(i).toString());
+			jsonObject1 = JsonProcess
+					.changeToJSONObject(JsonProcess.changeToJSONArray(result2.getBody()).get(i).toString());
 			revalue = JsonProcess.returnValue(jsonObject1, "item");
 			temp = JsonProcess.returnValue(jsonObject1, "value");
 			if (revalue.equals("BranchNumber")) {
@@ -504,7 +580,8 @@ public class CustomerMasterController {
 		}
 
 		// 调用可用customerNumber服务接口
-        String result3 = restTemplate.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber", String.class).getBody();
+		String result3 = restTemplate
+				.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber", String.class).getBody();
 		String customerNumber = "";
 		if (result3 == null) {
 			map.put("msg", "调用系统参数失败");
@@ -514,12 +591,12 @@ public class CustomerMasterController {
 		// 返回数据处理
 		customerNumber = JsonProcess.returnValue(JsonProcess.changeToJSONObject(result3), "nextAvailableNumber");
 
-		cam.getCustomer().setCustomernumber(clearcode + branchnumber + customerNumber);
+		cam.getCustomer().setCustomernumber(clearcode + branchnumber + customerNumber + cam.getAccount().getAccounttype());
 		cam.getCustomer().setId(UUIDUtil.generateUUID());
 
 		cam.getAccount().setBalance(new BigDecimal(0));
 		cam.getAccount().setId(UUIDUtil.generateUUID());
-		cam.getAccount().setAccountnumber(clearcode + branchnumber + customerNumber);
+		cam.getAccount().setAccountnumber(clearcode + branchnumber + customerNumber + cam.getAccount().getAccounttype());
 
 		map.put("msg", "处理成功");
 		map.put("localCCy", localCCy);
@@ -527,75 +604,7 @@ public class CustomerMasterController {
 
 		return objectMapper.writeValueAsString(map);
 	}
-
-	/**
-	 * 创建账号日志
-	 * 
-	 * @param accountNumber
-	 * @return
-	 */
-	private boolean createAccountLog(String accountNumber) {
-		try {
-			SysTransactionLogEntity log = new SysTransactionLogEntity();
-			log.setId(UUIDUtil.generateUUID());
-			log.setOperationtype(SysConstant.OPERATION_CREATE);
-			log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
-			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
-			log.setOperationdate(sf.parse(sf.format(new Date())));
-			log.setOperationdetail("create accountNumber:" + accountNumber + " success!");
-			
-			@SuppressWarnings("unused")
-			ResponseEntity<String> result2 = restTemplate.postForEntity(SysConstant.WRITE_LOG_SERVICEPATH, PostUtil.getRequestEntity(JsonProcess.changeEntityTOJSON(log)),String.class);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * 创建关闭账号日志
-	 * 
-	 * @param accountNumber
-	 * @return
-	 */
-	private boolean closeAccountLog(String accountNumber) {
-		try {
-			SysTransactionLogEntity log = new SysTransactionLogEntity();
-			log.setId(UUIDUtil.generateUUID());
-			log.setOperationtype(SysConstant.OPERATION_DELETE);
-			log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
-			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
-			log.setOperationdate(sf.parse(sf.format(new Date())));
-			log.setOperationdetail("close accountNumber:" + accountNumber + " success!");
-			
-			@SuppressWarnings("unused")
-			ResponseEntity<String> result2 = restTemplate.postForEntity(SysConstant.WRITE_LOG_SERVICEPATH, PostUtil.getRequestEntity(JsonProcess.changeEntityTOJSON(log)),String.class);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * 账号修改
-	 */
-	private boolean updateAccountLog(String accountNumber) {
-		try {
-			SysTransactionLogEntity log = new SysTransactionLogEntity();
-			log.setId(UUIDUtil.generateUUID());
-			log.setOperationtype(SysConstant.OPERATION_UPDATE);
-			log.setSourceservices(SysConstant.LOCAL_SERVICE_NAME);
-			log.setOperationstate(SysConstant.OPERATION_SUCCESS);
-			log.setOperationdate(sf.parse(sf.format(new Date())));
-			log.setOperationdetail("update accountNumber:" + accountNumber + " contact information success!");
-			
-			@SuppressWarnings("unused")
-			ResponseEntity<String> result2 = restTemplate.postForEntity(SysConstant.WRITE_LOG_SERVICEPATH, PostUtil.getRequestEntity(JsonProcess.changeEntityTOJSON(log)),String.class);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
+	
 
 	/**
 	 * 字段校验
@@ -629,57 +638,10 @@ public class CustomerMasterController {
 		if (cam.getAccount().getCurrencycode() == null || "".equals(cam.getAccount().getCurrencycode())) {
 			return false;
 		}
-		// if(cam.getAccount().getAccounttype()==null ||
-		// "".equals(cam.getAccount().getAccounttype())){
-		// return false;
-		// }
+		if (cam.getAccount().getAccounttype() == null || "".equals(cam.getAccount().getAccounttype())) {
+			return false;
+		}
 
 		return true;
 	}
-
-	/**
-	 * 可用Number加一
-	 */
-	private void availableNumberIncrease() {
-		Map<String,Object> map = new HashMap<String,Object>();
-		String currentNumber = restTemplate.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber", String.class).getBody();
-		if (currentNumber == null) {
-			map.put("msg", "调用系统参数失败");
-			map.put("code", "0");
-		}
-		int nextAvailableCustomerNumber = 0;
-		nextAvailableCustomerNumber = Integer.parseInt(JsonProcess.returnValue(JsonProcess.changeToJSONObject(currentNumber), "nextAvailableNumber"));
-		// 可用number加1
-		nextAvailableCustomerNumber = nextAvailableCustomerNumber + 1;
-		String availableNumber = String.valueOf(nextAvailableCustomerNumber);
-		int availableNumberLength = availableNumber.length();
-		String appendSave = "";
-		// 可用number长度判断
-		switch (availableNumberLength) {
-		case 1:
-			appendSave = "0000" + nextAvailableCustomerNumber;
-			break;
-		case 2:
-			appendSave = "000" + nextAvailableCustomerNumber;
-			break;
-		case 3:
-			appendSave = "00" + nextAvailableCustomerNumber;
-			break;
-		case 4:
-			appendSave = "0" + nextAvailableCustomerNumber;
-			break;
-		case 5:
-			appendSave = nextAvailableCustomerNumber + "";
-			break;
-		}
-		
-		
-        String param = "{\"value\":\""+appendSave+"\"}";
-		ResponseEntity<String> result = restTemplate.postForEntity("http://SYSADMIN/sysadmin/generate/saveNextAvailableNumber", PostUtil.getRequestEntity(param),String.class);
-		if (!result.getStatusCode().equals("200")) {
-			map.put("msg", "生成下一个可用number失败");
-			map.put("code", "0");
-		}
-	}
-
 }
