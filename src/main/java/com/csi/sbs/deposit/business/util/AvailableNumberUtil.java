@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.csi.sbs.common.business.json.JsonProcess;
+import com.csi.sbs.deposit.business.constant.SysConstant;
 
 public class AvailableNumberUtil {
 	
@@ -17,7 +18,7 @@ public class AvailableNumberUtil {
 	 */
 	public static void availableNumberIncrease(RestTemplate restTemplate,String item) {
 		Map<String,Object> map = new HashMap<String,Object>();
-		String currentNumber = restTemplate.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber", String.class).getBody();
+		String currentNumber = restTemplate.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber/"+SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER, String.class).getBody();
 		if (currentNumber == null) {
 			map.put("msg", "调用系统参数失败");
 			map.put("code", "0");
