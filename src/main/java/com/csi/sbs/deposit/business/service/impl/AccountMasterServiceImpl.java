@@ -48,7 +48,10 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 	public int closeAccount(AccountMasterEntity ame) {
 		return accountMasterDao.closeAccount(ame);
 	}
-
+	@Override
+	public int update(AccountMasterEntity ame) {
+		return accountMasterDao.update(ame);
+	}
 	
 	@Override
 	@Transactional
@@ -136,6 +139,8 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 		}
 		return true;
 	}
+
+
 
 	@Override
 	@Transactional

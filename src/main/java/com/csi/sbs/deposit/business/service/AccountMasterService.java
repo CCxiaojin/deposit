@@ -22,6 +22,7 @@ public interface AccountMasterService {
 	   
 	   public Map<String,Object> deposit(DepositModel depositModel,RestTemplate restTemplate) throws ParseException;
 	   
+	   public int update(AccountMasterEntity ame);
 	   public Map<String,Object> withdrawal(WithDrawalModel withDrawalModel,RestTemplate restTemplate) throws ParseException;
 
 }
