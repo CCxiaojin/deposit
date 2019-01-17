@@ -460,7 +460,6 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for account search", notes = "version 0.0.1")
 	@ApiImplicitParam(paramType = "body", name = "accountNumModel", required = true, value = "accountNumModel")
 	public String accountSearch(@RequestBody AccountNumber accountNumModel) throws JsonProcessingException{
-		@SuppressWarnings("unused")
 		Map<String, Object> map = new HashMap<String, Object>();
 		AccountMasterEntity ame = new AccountMasterEntity();
 		ame.setAccountnumber(accountNumModel.getAccountNumber());
