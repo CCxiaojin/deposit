@@ -50,7 +50,7 @@ import com.csi.sbs.deposit.business.util.PostUtil;
 @CrossOrigin // 解决跨域请求
 @Controller
 @RequestMapping("/deposit/account")
-@Api(value = "Then controller is deposit account")
+@Api(value = "Then controller is deposit account",produces = "application/json")
 public class CustomerMasterController {
 
 	@Resource
@@ -75,7 +75,7 @@ public class CustomerMasterController {
 	 */
 	@RequestMapping(value = "/openingSavingAccount", method = RequestMethod.POST)
 	@ResponseBody
-	@ApiOperation(value = "This api is for create savingaccount", notes = "version 0.0.1")
+	@ApiOperation(value = "This api is for create savingaccount", notes = "version 0.0.1",produces = "application/json")
 	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
 			@ApiResponse(code = 1, message = "Create Success!") })
 	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
@@ -460,6 +460,7 @@ public class CustomerMasterController {
 	@ApiOperation(value = "This api is for account search", notes = "version 0.0.1")
 	@ApiImplicitParam(paramType = "body", name = "accountNumModel", required = true, value = "accountNumModel")
 	public String accountSearch(@RequestBody AccountNumber accountNumModel) throws JsonProcessingException{
+		@SuppressWarnings("unused")
 		Map<String, Object> map = new HashMap<String, Object>();
 		AccountMasterEntity ame = new AccountMasterEntity();
 		ame.setAccountnumber(accountNumModel.getAccountNumber());

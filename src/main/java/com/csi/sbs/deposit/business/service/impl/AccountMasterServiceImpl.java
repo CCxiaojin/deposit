@@ -48,6 +48,7 @@ public class AccountMasterServiceImpl implements AccountMasterService{
 	public int closeAccount(AccountMasterEntity ame) {
 		return accountMasterDao.closeAccount(ame);
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public int update(AccountMasterEntity ame) {
 		return accountMasterDao.update(ame);
