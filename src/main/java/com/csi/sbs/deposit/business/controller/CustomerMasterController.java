@@ -47,7 +47,7 @@ import com.csi.sbs.deposit.business.util.PostUtil;
 @CrossOrigin // 解决跨域请求
 @Controller
 @RequestMapping("/deposit/account")
-@Api(value = "Then controller is deposit account", produces = "application/json")
+@Api(value = "Then controller is deposit account")
 public class CustomerMasterController {
 
 	@Resource

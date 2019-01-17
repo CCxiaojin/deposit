@@ -52,7 +52,7 @@ public class Swagger2 {
                 .title("Open API for deposit service")
                 .description("Open API for deposit service")
                 .termsOfServiceUrl(SysConstant.LOCAL_SERVICE_URL)
-                .contact("Pim li:lihuacheng@chinasofit.com")
+                .contact("Pim li:lihuacheng@chinasofti.com")
                 .version("1.0")
                 .build();
     }
