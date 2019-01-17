@@ -468,7 +468,9 @@ public class CustomerMasterController {
 		// 根据accountNumber查询账号
 		List<AccountMasterEntity> accountList = accountMasterService.findAccountByParams(ame);
 		if(accountList == null || accountList.size() == 0){
-			return null;
+			map.put("msg", "Record Not Found");
+			map.put("code", "0");
+			return objectMapper.writeValueAsString(map);
 		}else{
 			return objectMapper.writeValueAsString(accountList.get(0));
 		}
