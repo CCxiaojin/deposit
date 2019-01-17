@@ -3,73 +3,62 @@ package com.csi.sbs.deposit.business.clientmodel;
 import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
 public class CustomerMasterModel {
-	
-	
+
 	private String id;
 
-    private String customernumber;
+	private String customernumber;
 
-    @ApiModelProperty(required=true)
-    private String customername;
+	private String customername;
 
-    @ApiModelProperty(required=true)
-    private String mobilephonenumber;
+	private String mobilephonenumber;
 
-    @ApiModelProperty(required=true)
-    private String customerid;
+	private String customerid;
 
-    @ApiModelProperty(required=true)
-    private String issuecountry;
+	private String issuecountry;
 
-    @ApiModelProperty(required=true)
-    private Date dateofbirth;
+	private Date dateofbirth;
 
-    private String chinesename;
+	private String chinesename;
 
-    private String gender;
+	private String gender;
 
-    private String nationality;
+	private String nationality;
 
-    private String permanentresidencestatus;
+	private String permanentresidencestatus;
 
-    private String maritalstatus;
+	private String maritalstatus;
 
-    private String education;
+	private String education;
 
-    private String residentialaddress;
+	private String residentialaddress;
 
-    @ApiModelProperty(required=true)
-    private String mailingaddress;
+	private String mailingaddress;
 
-    private String residencephonenumber;
+	private String residencephonenumber;
 
-    private String wechatid;
+	private String wechatid;
 
-    private String accommodation;
+	private String accommodation;
 
-    private Short yearsofresidence;
+	private Short yearsofresidence;
 
-    private String occupation;
+	private String occupation;
 
-    private String employercompanyname;
+	private String employercompanyname;
 
-    private String position;
+	private String position;
 
-    private String companyaddress;
+	private String companyaddress;
 
-    private String companyphonenumber;
+	private String companyphonenumber;
 
-    private Short yearsofservices;
+	private Short yearsofservices;
 
-    private Integer monthlysalary;
-    
-    
-    
-   
+	private Integer monthlysalary;
+
 	public String getId() {
 		return id;
 	}
@@ -277,5 +266,5 @@ public class CustomerMasterModel {
 	public void setMonthlysalary(Integer monthlysalary) {
 		this.monthlysalary = monthlysalary;
 	}
-    
+
 }

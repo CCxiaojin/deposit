@@ -1,33 +1,25 @@
 package com.csi.sbs.deposit.business.clientmodel;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
 public class CustomerMaintenanceModel {
 
 	private String customerName;
 
-	@ApiModelProperty(required=true)
 	private String customerID;
 
 	private String issueCountry;
 
 	private String dateOfBirth;
 
-	@ApiModelProperty(required=true)
 	private String mailingAddress;
 
-	@ApiModelProperty(required=true)
 	private String mobilePhoneNumber;
 
-	@ApiModelProperty(required=true)
 	private String accountNumber;
-	
+
 	private String accountType;
-	
-	
-	
 
 	public String getAccountType() {
 		return accountType;

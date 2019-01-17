@@ -4,36 +4,29 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 
 @ApiModel
 public class AccountMasterModel {
-	
-    
+
 	private String id;
 
-    private String accountnumber;
+	private String accountnumber;
 
-    @ApiModelProperty(required=true)
-    private String accounttype;
+	private String accounttype;
 
-    private String accountstatus;
+	private String accountstatus;
 
-    @ApiModelProperty(required=true)
-    private String currencycode;
+	private String currencycode;
 
-    private BigDecimal balance;
+	private BigDecimal balance;
 
-    private Date lastupdateddate;
+	private Date lastupdateddate;
 
-    private String chequebooktype;
+	private String chequebooktype;
 
-    private Short chequebooksize;
-    
-    private String customerprimarykeyid;
-    
-    
+	private Short chequebooksize;
+
+	private String customerprimarykeyid;
 
 	public String getCustomerprimarykeyid() {
 		return customerprimarykeyid;
@@ -115,6 +108,4 @@ public class AccountMasterModel {
 		this.chequebooksize = chequebooksize;
 	}
 
-	
-    
 }

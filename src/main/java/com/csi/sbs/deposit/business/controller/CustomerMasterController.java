@@ -23,10 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 import com.alibaba.fastjson.JSONObject;
 import com.csi.sbs.common.business.json.JsonProcess;
@@ -50,7 +47,7 @@ import com.csi.sbs.deposit.business.util.PostUtil;
 @CrossOrigin // 解决跨域请求
 @Controller
 @RequestMapping("/deposit/account")
-@Api(value = "Then controller is deposit account",produces = "application/json")
+@Api(value = "Then controller is deposit account", produces = "application/json")
 public class CustomerMasterController {
 
 	@Resource
@@ -75,10 +72,7 @@ public class CustomerMasterController {
 	 */
 	@RequestMapping(value = "/openingSavingAccount", method = RequestMethod.POST)
 	@ResponseBody
-	@ApiOperation(value = "This api is for create savingaccount", notes = "version 0.0.1",produces = "application/json")
-	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
-			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
+	@ApiOperation(value = "This api is for create savingaccount", notes = "version 0.0.1")
 	public String openingSavingAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel)
 			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -103,13 +97,8 @@ public class CustomerMasterController {
 
 			// 写入日志
 			String logstr = "create accountNumber:" + temp[0] + " success!";
-			LogUtil.saveLog(
-					restTemplate, 
-					SysConstant.OPERATION_CREATE, 
-					SysConstant.LOCAL_SERVICE_NAME, 
-					SysConstant.OPERATION_SUCCESS, 
-					logstr
-					);
+			LogUtil.saveLog(restTemplate, SysConstant.OPERATION_CREATE, SysConstant.LOCAL_SERVICE_NAME,
+					SysConstant.OPERATION_SUCCESS, logstr);
 			AvailableNumberUtil.availableNumberIncrease(restTemplate, SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
@@ -132,9 +121,6 @@ public class CustomerMasterController {
 	@RequestMapping(value = "/openingCurrentAccount", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for create currentaccount", notes = "version 0.0.1")
-	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
-			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
 	public String openingCurrentAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel)
 			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -158,13 +144,8 @@ public class CustomerMasterController {
 			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
 			// 写入日志
 			String logstr = "create accountNumber:" + temp[0] + " success!";
-			LogUtil.saveLog(
-					restTemplate, 
-					SysConstant.OPERATION_CREATE, 
-					SysConstant.LOCAL_SERVICE_NAME, 
-					SysConstant.OPERATION_SUCCESS,
-					logstr
-					);
+			LogUtil.saveLog(restTemplate, SysConstant.OPERATION_CREATE, SysConstant.LOCAL_SERVICE_NAME,
+					SysConstant.OPERATION_SUCCESS, logstr);
 			AvailableNumberUtil.availableNumberIncrease(restTemplate, SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
@@ -187,9 +168,6 @@ public class CustomerMasterController {
 	@RequestMapping(value = "/openingFEAccount", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for create feaccount", notes = "version 0.0.1")
-	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
-			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
 	public String openingFEAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel)
 			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -212,13 +190,8 @@ public class CustomerMasterController {
 			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
 			// 写入日志
 			String logstr = "create accountNumber:" + temp[0] + " success!";
-			LogUtil.saveLog(
-					restTemplate, 
-					SysConstant.OPERATION_CREATE, 
-					SysConstant.LOCAL_SERVICE_NAME, 
-					SysConstant.OPERATION_SUCCESS,
-					logstr
-					);
+			LogUtil.saveLog(restTemplate, SysConstant.OPERATION_CREATE, SysConstant.LOCAL_SERVICE_NAME,
+					SysConstant.OPERATION_SUCCESS, logstr);
 			AvailableNumberUtil.availableNumberIncrease(restTemplate, SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
@@ -241,9 +214,6 @@ public class CustomerMasterController {
 	@RequestMapping(value = "/openingTDAccount", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for create tdaccount", notes = "version 0.0.1")
-	@ApiResponses({ @ApiResponse(code = 0, message = "Create Fail!"),
-			@ApiResponse(code = 1, message = "Create Success!") })
-	@ApiImplicitParam(paramType = "body", name = "cam", required = true, value = "CustomerAndAccountModel")
 	public String openingTDAccount(@RequestBody CustomerAndAccountModel customerAndAccountModel)
 			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -265,13 +235,8 @@ public class CustomerMasterController {
 			String[] temp = customerMasterService.createCustomer(customerAndAccountModel, flag, recustomer);
 			// 写入日志
 			String logstr = "create accountNumber:" + temp[0] + " success!";
-			LogUtil.saveLog(
-					restTemplate, 
-					SysConstant.OPERATION_CREATE, 
-					SysConstant.LOCAL_SERVICE_NAME, 
-					SysConstant.OPERATION_SUCCESS, 
-					logstr
-					);
+			LogUtil.saveLog(restTemplate, SysConstant.OPERATION_CREATE, SysConstant.LOCAL_SERVICE_NAME,
+					SysConstant.OPERATION_SUCCESS, logstr);
 			AvailableNumberUtil.availableNumberIncrease(restTemplate, SysConstant.NEXT_AVAILABLE_CUSTOMERNUMBER);
 			map.put("msg", "创建成功");
 			map.put("accountNumber", temp[0]);
@@ -294,9 +259,6 @@ public class CustomerMasterController {
 	@RequestMapping(value = "/accountClosure", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for close account", notes = "version 0.0.1")
-	@ApiResponses({ @ApiResponse(code = 0, message = "close Fail!"),
-			@ApiResponse(code = 1, message = "close Success!") })
-	@ApiImplicitParam(paramType = "body", name = "closeAccountModel", required = true, value = "closeAccountModel")
 	public String accountClosure(@RequestBody CloseAccountModel closeAccountModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -324,13 +286,8 @@ public class CustomerMasterController {
 				map.put("msg", "Account Deleted Success");
 				map.put("code", "1");
 				String logstr = "close accountNumber:" + ame.getAccountnumber() + " success!";
-				LogUtil.saveLog(
-						restTemplate, 
-						SysConstant.OPERATION_UPDATE, 
-						SysConstant.LOCAL_SERVICE_NAME, 
-						SysConstant.OPERATION_SUCCESS, 
-						logstr
-						);
+				LogUtil.saveLog(restTemplate, SysConstant.OPERATION_UPDATE, SysConstant.LOCAL_SERVICE_NAME,
+						SysConstant.OPERATION_SUCCESS, logstr);
 			} else {
 				map.put("msg", "Account Deleted Fail");
 				map.put("code", "0");
@@ -354,9 +311,6 @@ public class CustomerMasterController {
 	@RequestMapping(value = "/updateCustContactInfo", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for update customer contact Information", notes = "version 0.0.1")
-	@ApiResponses({ @ApiResponse(code = 0, message = "update Fail!"),
-			@ApiResponse(code = 1, message = "update Success!") })
-	@ApiImplicitParam(paramType = "body", name = "customerMaintenanceModel", required = true, value = "customerMaintenanceModel")
 	public String updateCustContactInfo(@RequestBody CustomerMaintenanceModel customerMaintenanceModel)
 			throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -378,14 +332,10 @@ public class CustomerMasterController {
 				map.put("msg", customerMaintenanceModel.getAccountNumber()
 						+ "-Customer Contact Information already Record Changed");
 				map.put("code", "1");
-				String logstr = "update accountNumber:" + customerMaintenanceModel.getAccountNumber() + " contact information success!";
-				LogUtil.saveLog(
-						restTemplate, 
-						SysConstant.OPERATION_UPDATE, 
-						SysConstant.LOCAL_SERVICE_NAME, 
-						SysConstant.OPERATION_SUCCESS, 
-						logstr
-						);
+				String logstr = "update accountNumber:" + customerMaintenanceModel.getAccountNumber()
+						+ " contact information success!";
+				LogUtil.saveLog(restTemplate, SysConstant.OPERATION_UPDATE, SysConstant.LOCAL_SERVICE_NAME,
+						SysConstant.OPERATION_SUCCESS, logstr);
 				return objectMapper.writeValueAsString(map);
 			} else {
 				map.put("msg", "Record Change Fail");
@@ -410,9 +360,6 @@ public class CustomerMasterController {
 	@RequestMapping(value = "/deposit", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for deposit", notes = "version 0.0.1")
-	@ApiResponses({ @ApiResponse(code = 0, message = "deposit Fail!"),
-			@ApiResponse(code = 1, message = "deposit Success!") })
-	@ApiImplicitParam(paramType = "body", name = "depositModel", required = true, value = "depositModel")
 	public String deposit(@RequestBody DepositModel depositModel) throws JsonProcessingException {
 		Map<String, Object> map = null;
 		try {
@@ -434,9 +381,6 @@ public class CustomerMasterController {
 	@RequestMapping(value = "/withdrawal", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for withdrawal", notes = "version 0.0.1")
-	@ApiResponses({ @ApiResponse(code = 0, message = "withdrawal Fail!"),
-			@ApiResponse(code = 1, message = "withdrawal Success!") })
-	@ApiImplicitParam(paramType = "body", name = "withDrawalModel", required = true, value = "withDrawalModel")
 	public String withdrawal(@RequestBody WithDrawalModel withDrawalModel) throws JsonProcessingException {
 		Map<String, Object> map = null;
 		try {
@@ -447,19 +391,18 @@ public class CustomerMasterController {
 		}
 		return objectMapper.writeValueAsString(map);
 	}
-	
+
 	/**
-	 * 查找账号 Alina 
+	 * 查找账号 Alina
 	 * 
 	 * @param accountNumModel
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(value="/accountSearch", method = RequestMethod.POST)
+	@RequestMapping(value = "/accountSearch", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for account search", notes = "version 0.0.1")
-	@ApiImplicitParam(paramType = "body", name = "accountNumModel", required = true, value = "accountNumModel")
-	public String accountSearch(@RequestBody AccountNumber accountNumModel) throws JsonProcessingException{
+	public String accountSearch(@RequestBody AccountNumber accountNumModel) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		AccountMasterEntity ame = new AccountMasterEntity();
 		ame.setAccountnumber(accountNumModel.getAccountNumber());
@@ -467,15 +410,15 @@ public class CustomerMasterController {
 		ame.setCurrencycode(accountNumModel.getCcycode());
 		// 根据accountNumber查询账号
 		List<AccountMasterEntity> accountList = accountMasterService.findAccountByParams(ame);
-		if(accountList == null || accountList.size() == 0){
+		if (accountList == null || accountList.size() == 0) {
 			map.put("msg", "Record Not Found");
 			map.put("code", "0");
 			return objectMapper.writeValueAsString(map);
-		}else{
+		} else {
 			return objectMapper.writeValueAsString(accountList.get(0));
 		}
 	}
-	
+
 	/**
 	 * Alina 查找账号
 	 * 
@@ -483,44 +426,39 @@ public class CustomerMasterController {
 	 * @return
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(value="/updateAccountInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateAccountInfo", method = RequestMethod.POST)
 	@ResponseBody
 	@ApiOperation(value = "This api is for update account master information", notes = "version 0.0.1")
-	@ApiImplicitParam(paramType = "body", name = "accountNumModel", required = true, value = "accountNumModel")
-	public String updateAccountInfo(@RequestBody AccountMasterEntity accountInfo) throws JsonProcessingException{
+	public String updateAccountInfo(@RequestBody AccountMasterEntity accountInfo) throws JsonProcessingException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Date lastupdateddate = null;
 		try {
-			lastupdateddate= sf.parse(sf.format(new Date()));
+			lastupdateddate = sf.parse(sf.format(new Date()));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		accountInfo.setLastupdateddate(lastupdateddate);
-		try{
+		try {
 			int a = accountMasterService.update(accountInfo);
-			if(a>0){
+			if (a > 0) {
 				map.put("msg", "update success");
 				map.put("code", "1");
-				String logstr = "update accountNumber:" + accountInfo.getAccountnumber() + " account infomation success!";
-				LogUtil.saveLog(
-						restTemplate, 
-						SysConstant.OPERATION_UPDATE, 
-						SysConstant.LOCAL_SERVICE_NAME, 
-						SysConstant.OPERATION_SUCCESS, 
-						logstr
-						);
-			}else{
+				String logstr = "update accountNumber:" + accountInfo.getAccountnumber()
+						+ " account infomation success!";
+				LogUtil.saveLog(restTemplate, SysConstant.OPERATION_UPDATE, SysConstant.LOCAL_SERVICE_NAME,
+						SysConstant.OPERATION_SUCCESS, logstr);
+			} else {
 				map.put("msg", "Record Change Fail");
 				map.put("code", "0");
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			map.put("msg", "Record Change Fail");
 			map.put("code", "0");
 		}
 		return objectMapper.writeValueAsString(map);
 	}
-	
+
 	/**
 	 * 创建账号公共业务处理
 	 * 
@@ -584,7 +522,9 @@ public class CustomerMasterController {
 
 		// 调用可用customerNumber服务接口
 		String result3 = restTemplate
-				.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber/NextAvailableCustomerNumber", String.class).getBody();
+				.getForEntity("http://SYSADMIN/sysadmin/generate/getNextAvailableNumber/NextAvailableCustomerNumber",
+						String.class)
+				.getBody();
 		String customerNumber = "";
 		if (result3 == null) {
 			map.put("msg", "调用系统参数失败");
@@ -594,12 +534,14 @@ public class CustomerMasterController {
 		// 返回数据处理
 		customerNumber = JsonProcess.returnValue(JsonProcess.changeToJSONObject(result3), "nextAvailableNumber");
 
-		cam.getCustomer().setCustomernumber(clearcode + branchnumber + customerNumber + cam.getAccount().getAccounttype());
+		cam.getCustomer()
+				.setCustomernumber(clearcode + branchnumber + customerNumber + cam.getAccount().getAccounttype());
 		cam.getCustomer().setId(UUIDUtil.generateUUID());
 
 		cam.getAccount().setBalance(new BigDecimal(0));
 		cam.getAccount().setId(UUIDUtil.generateUUID());
-		cam.getAccount().setAccountnumber(clearcode + branchnumber + customerNumber + cam.getAccount().getAccounttype());
+		cam.getAccount()
+				.setAccountnumber(clearcode + branchnumber + customerNumber + cam.getAccount().getAccounttype());
 
 		map.put("msg", "处理成功");
 		map.put("localCCy", localCCy);
@@ -607,7 +549,6 @@ public class CustomerMasterController {
 
 		return objectMapper.writeValueAsString(map);
 	}
-	
 
 	/**
 	 * 字段校验
