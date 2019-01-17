@@ -47,6 +47,7 @@ public class TermDepositEnquiryController {
 			map.put("msg", "查找成功");
      	   	map.put("code", "1");			    	   
 			//写入日志
+     	   	
 			String logstr = "Transaction Accepted:"+cam.getAccountnumber();
 			LogUtil.saveLog(
 					restTemplate, 
